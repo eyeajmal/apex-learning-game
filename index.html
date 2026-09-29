@@ -3,833 +3,114 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Apex — Learn HTML and Python by playing</title>
-  <meta name="description" content="Learn HTML and Python one tiny puzzle at a time with live previews, friendly hints, and instant feedback.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23131827'/%3E%3Cpath d='M6 24 16 6l10 18h-6l-4-8-4 8Z' fill='%23eaff55'/%3E%3C/svg%3E">
+  <meta name="description" content="Learn HTML and Python with searchable lessons, clear examples, mini tasks, and coding puzzles.">
+  <title>Apex — Learn HTML & Python</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23131b2f'/%3E%3Cpath d='M12 49 32 10l20 39h-9l-4-9H25l-4 9zm17-18h7l-4-9z' fill='%23eaff55'/%3E%3C/svg%3E">
   <style>
-    :root {
-      color-scheme: dark;
-      --ink: #101522;
-      --panel: #181f31;
-      --panel-2: #212a40;
-      --line: #37415b;
-      --paper: #f7f8ef;
-      --muted: #aeb8ce;
-      --lime: #eaff55;
-      --blue: #8fa5ff;
-      --coral: #ff806d;
-      --mint: #61e7b2;
-      --shadow: 0 18px 50px rgba(3, 8, 20, .3);
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { min-width: 320px; background: var(--ink); }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--paper);
-      background:
-        radial-gradient(circle at 15% 0%, rgba(143, 165, 255, .16), transparent 28rem),
-        linear-gradient(180deg, #141a2a 0%, var(--ink) 65%);
-    }
-
-    body[data-language="python"] {
-      --lime: #ffd84a;
-      --blue: #5aa9e6;
-      --mint: #82e7c1;
-    }
-
-    button, textarea { font: inherit; }
-    button { cursor: pointer; }
-
-    button:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
-      outline: 3px solid var(--lime);
-      outline-offset: 3px;
-    }
-
-    .shell { width: min(1500px, 100%); margin: 0 auto; padding: 20px 24px 36px; }
-
-    header {
-      display: grid;
-      grid-template-columns: auto auto minmax(180px, 1fr) auto;
-      align-items: center;
-      gap: 28px;
-      min-height: 64px;
-      margin-bottom: 18px;
-    }
-
-    .brand { display: flex; align-items: center; gap: 11px; }
-
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      color: var(--ink);
-      background: var(--lime);
-      border-radius: 13px 13px 6px 13px;
-      font-weight: 900;
-      font-size: 1.35rem;
-      transform: rotate(-3deg);
-      box-shadow: 4px 4px 0 var(--blue);
-    }
-
-    .brand-name { font-size: 1.45rem; font-weight: 900; letter-spacing: -.04em; }
-    .brand-note { display: block; margin-top: 1px; color: var(--muted); font-size: .82rem; }
-
-    .course-switcher {
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      background: #0d1320;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-    }
-
-    .course-btn {
-      min-height: 36px;
-      padding: 7px 12px;
-      color: var(--muted);
-      background: transparent;
-      border: 0;
-      border-radius: 10px;
-      font-weight: 800;
-    }
-
-    .course-btn:hover { color: var(--paper); }
-    .course-btn[aria-pressed="true"] { color: var(--ink); background: var(--lime); }
-
-    .climb { max-width: 640px; justify-self: center; width: 100%; }
-    .climb-label { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--muted); font-size: .85rem; }
-    .trail { height: 10px; border: 1px solid var(--line); border-radius: 999px; background: #0b101b; overflow: hidden; }
-    .trail-fill { width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--lime)); transition: width .45s ease; }
-
-    .xp-pill {
-      min-width: 110px;
-      padding: 10px 14px;
-      color: var(--lime);
-      background: rgba(234, 255, 85, .08);
-      border: 1px solid rgba(234, 255, 85, .35);
-      border-radius: 999px;
-      text-align: center;
-      font-weight: 800;
-    }
-
-    .game-grid {
-      display: grid;
-      grid-template-columns: 220px minmax(500px, 1.15fr) minmax(360px, .85fr);
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .panel {
-      background: rgba(24, 31, 49, .94);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .level-rail { padding: 18px; }
-    .level-rail h2 { margin: 2px 4px 14px; font-size: 1rem; }
-    .level-list { display: grid; gap: 8px; }
-
-    .level-btn {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 10px;
-      width: 100%;
-      padding: 10px;
-      color: var(--muted);
-      text-align: left;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 14px;
-    }
-
-    .level-btn:hover { background: rgba(255,255,255,.04); }
-    .level-btn[aria-current="step"] { color: var(--paper); background: var(--panel-2); border-color: var(--blue); }
-    .level-btn.done { color: var(--mint); }
-
-    .level-number {
-      display: grid;
-      place-items: center;
-      width: 34px;
-      height: 34px;
-      background: #0f1421;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      font-weight: 900;
-    }
-
-    .level-btn[aria-current="step"] .level-number { color: var(--ink); background: var(--lime); border-color: var(--lime); }
-    .level-btn.done .level-number { color: var(--ink); background: var(--mint); border-color: var(--mint); }
-    .level-name { align-self: center; font-size: .9rem; font-weight: 700; line-height: 1.15; }
-
-    .rail-tip { margin: 18px 4px 0; padding-top: 16px; color: var(--muted); border-top: 1px solid var(--line); font-size: .82rem; line-height: 1.5; }
-    kbd { padding: 2px 6px; color: var(--paper); background: #0e1420; border: 1px solid var(--line); border-radius: 5px; font-family: inherit; }
-
-    .challenge { display: flex; flex-direction: column; min-height: 690px; overflow: hidden; }
-
-    .challenge-head { padding: 26px 28px 18px; }
-    .mission-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-    .mission-kicker { margin: 0 0 5px; color: var(--lime); font-weight: 800; font-size: .88rem; }
-    h1 { max-width: 18ch; margin: 0; font-size: clamp(1.75rem, 3vw, 2.7rem); line-height: 1.03; letter-spacing: -.045em; }
-    .reward { flex: 0 0 auto; padding: 7px 10px; color: var(--ink); background: var(--lime); border-radius: 9px; font-weight: 900; transform: rotate(2deg); }
-    .lesson { max-width: 65ch; margin: 14px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.55; }
-    .lesson code, .hint code, .feedback code { color: var(--lime); font-family: Consolas, monospace; }
-
-    .goal {
-      display: flex;
-      gap: 11px;
-      margin: 0 28px 18px;
-      padding: 13px 15px;
-      color: #dfe4f1;
-      background: rgba(143, 165, 255, .09);
-      border-left: 4px solid var(--blue);
-      border-radius: 6px 14px 14px 6px;
-      line-height: 1.45;
-    }
-
-    .goal strong { color: var(--blue); }
-
-    .editor-wrap { display: flex; flex: 1; flex-direction: column; min-height: 320px; margin: 0 18px; overflow: hidden; background: #0b101b; border: 1px solid #303a51; border-radius: 17px; }
-    .editor-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 13px; color: var(--muted); background: #111827; border-bottom: 1px solid #303a51; font-size: .84rem; }
-    .window-dots { display: flex; gap: 6px; }
-    .window-dots i { display: block; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
-    .window-dots i:nth-child(2) { background: var(--lime); }
-    .window-dots i:nth-child(3) { background: var(--blue); }
-
-    #codeEditor {
-      flex: 1;
-      width: 100%;
-      min-height: 270px;
-      padding: 18px;
-      resize: none;
-      color: #eff3ff;
-      background: transparent;
-      border: 0;
-      outline: 0;
-      font: 500 1rem/1.65 Consolas, "Courier New", monospace;
-      tab-size: 2;
-    }
-
-    .actions { display: flex; align-items: center; gap: 10px; padding: 16px 18px 18px; }
-    .btn { min-height: 44px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 12px; font-weight: 800; }
-    .btn-primary { color: var(--ink); background: var(--lime); border-color: var(--lime); box-shadow: 0 5px 0 #8c9b22; }
-    .btn-primary:hover { transform: translateY(1px); box-shadow: 0 4px 0 #8c9b22; }
-    .btn-secondary { color: var(--paper); background: transparent; }
-    .btn-secondary:hover { background: var(--panel-2); }
-    .btn-quiet { margin-left: auto; padding-inline: 10px; color: var(--muted); background: transparent; border-color: transparent; }
-    .btn-quiet:hover { color: var(--paper); }
-
-    .hint { display: none; margin: 0 18px 18px; padding: 13px 15px; color: #132319; background: #c5f5db; border-radius: 13px; line-height: 1.45; }
-    .hint.show { display: block; animation: pop .2s ease-out; }
-
-    .result { min-height: 62px; margin: 0 18px 18px; }
-    .feedback { padding: 13px 15px; border-radius: 13px; line-height: 1.45; }
-    .feedback.try { color: #35130d; background: #ffd0c8; }
-    .feedback.win { color: #0b2b1f; background: #b9f5dc; }
-    .feedback strong { display: block; margin-bottom: 2px; }
-
-    .preview-column { display: grid; grid-template-rows: minmax(380px, 1fr) auto; gap: 16px; }
-    .preview-panel { display: flex; flex-direction: column; overflow: hidden; }
-    .panel-title { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px; border-bottom: 1px solid var(--line); }
-    .panel-title h2 { margin: 0; font-size: 1rem; }
-    .live-badge { padding: 4px 8px; color: var(--mint); background: rgba(97, 231, 178, .1); border-radius: 999px; font-size: .78rem; font-weight: 800; }
-
-    .browser-chrome { display: flex; gap: 6px; padding: 10px 12px; background: #222a3c; }
-    .browser-chrome span { display: block; width: 9px; height: 9px; border-radius: 50%; background: #68738d; }
-    .address { flex: 1; width: auto !important; height: 10px; margin-left: 5px; background: #111725 !important; border-radius: 8px !important; }
-    iframe { flex: 1; width: 100%; min-height: 320px; background: white; border: 0; }
-
-    .toolbox { padding: 17px 18px 18px; }
-    .toolbox h2 { margin: 0 0 5px; font-size: 1rem; }
-    .toolbox p { margin: 0 0 13px; color: var(--muted); font-size: .85rem; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
-    .tag {
-      padding: 7px 9px;
-      color: #ccd5ed;
-      background: #111725;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      font: 700 .82rem Consolas, monospace;
-    }
-    .tag.active { color: var(--ink); background: var(--blue); border-color: var(--blue); }
-
-    .finish-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      display: none;
-      place-items: center;
-      padding: 24px;
-      background: rgba(6, 9, 17, .82);
-      backdrop-filter: blur(8px);
-    }
-    .finish-overlay.show { display: grid; }
-    .finish-card { position: relative; width: min(520px, 100%); padding: 40px; text-align: center; background: var(--paper); color: var(--ink); border-radius: 28px; box-shadow: 10px 10px 0 var(--blue); overflow: hidden; }
-    .summit { width: 82px; height: 82px; display: grid; place-items: center; margin: 0 auto 18px; color: var(--ink); background: var(--lime); border-radius: 50%; font-size: 2.2rem; font-weight: 900; }
-    .finish-card h2 { margin: 0; font-size: 2.2rem; letter-spacing: -.05em; }
-    .finish-card p { margin: 12px auto 22px; max-width: 36ch; color: #4b5366; line-height: 1.55; }
-    .finish-card .btn { color: white; background: var(--ink); border-color: var(--ink); box-shadow: none; }
-
-    @keyframes pop { from { transform: scale(.98); opacity: 0; } }
-
-    @media (max-width: 1120px) {
-      header { grid-template-columns: auto auto 1fr auto; gap: 16px; }
-      .game-grid { grid-template-columns: 190px 1fr; }
-      .preview-column { grid-column: 2; grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .challenge { min-height: 640px; }
-      iframe { min-height: 280px; }
-    }
-
-    @media (max-width: 760px) {
-      .shell { padding: 12px 12px 28px; }
-      header { grid-template-columns: 1fr auto; gap: 12px; }
-      .brand-note { display: none; }
-      .course-switcher { grid-column: 1 / -1; grid-row: 2; }
-      .course-btn { flex: 1; }
-      .climb { grid-column: 1 / -1; grid-row: 3; }
-      .xp-pill { min-width: auto; }
-      .game-grid { display: flex; flex-direction: column; }
-      .level-rail { padding: 12px; overflow-x: auto; }
-      .level-rail h2, .rail-tip { display: none; }
-      .level-list { display: flex; width: max-content; }
-      .level-btn { grid-template-columns: 34px; width: auto; }
-      .level-name { display: none; }
-      .challenge { min-height: 0; }
-      .challenge-head { padding: 22px 20px 16px; }
-      .goal { margin-inline: 20px; }
-      .editor-wrap, .hint, .result { margin-inline: 12px; }
-      .actions { flex-wrap: wrap; padding-inline: 12px; }
-      .btn-primary { flex: 1; }
-      .btn-quiet { width: 100%; margin-left: 0; }
-      .preview-column { display: flex; flex-direction: column; }
-      .preview-panel { min-height: 390px; }
-      .finish-card { padding: 30px 22px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
+    :root{--ink:#111827;--navy:#131b2f;--navy-2:#1c2741;--paper:#f5f7fb;--white:#fff;--lime:#eaff55;--yellow:#ffd84a;--blue:#6278ff;--cyan:#69e2ff;--muted:#667085;--line:#dce2ee;--green:#158a57;--red:#c83b54;--radius:18px;--shadow:0 14px 38px rgba(18,27,47,.12)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",sans-serif;font-size:16px;line-height:1.6}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}.app{min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;padding:14px clamp(18px,4vw,56px);background:var(--navy);color:#fff;border-bottom:4px solid var(--lime)}.brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none}.brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--lime);color:var(--navy);font-weight:900;font-size:1.35rem;transform:rotate(-3deg)}.brand-name{display:block;font-weight:900;font-size:1.2rem;line-height:1}.brand-note{display:block;margin-top:4px;color:#bfc9de;font-size:.76rem;line-height:1}.primary-nav{display:flex;justify-content:center;gap:6px}.nav-btn{border:1px solid transparent;background:transparent;color:#c9d2e5;padding:9px 16px;border-radius:10px;font-weight:800}.nav-btn:hover{color:#fff;background:#22304e}.nav-btn.active{color:var(--navy);background:var(--lime)}.xp-pill{min-width:86px;text-align:center;padding:8px 14px;border:1px solid #3d4b68;border-radius:999px;font-weight:900;color:var(--yellow)}
+    .view{display:none}.view.active{display:block}.learn-shell{max-width:1440px;margin:0 auto;padding:30px clamp(18px,4vw,54px) 56px}.learn-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,560px);align-items:end;gap:36px;margin-bottom:24px}.eyebrow{margin:0 0 8px;color:#4d5fb9;font-weight:900}h1,h2,h3,p{margin-top:0}h1{margin-bottom:8px;font-size:clamp(2rem,5vw,4.2rem);line-height:1;letter-spacing:-.055em;max-width:800px}.intro-copy{max-width:700px;margin-bottom:0;color:#526078;font-size:1.05rem}.search-box{position:relative}.search-box svg{position:absolute;left:17px;top:50%;transform:translateY(-50%);width:22px;color:#75819a}.search-input{width:100%;height:58px;border:2px solid var(--navy);border-radius:15px;padding:0 48px;background:#fff;box-shadow:6px 6px 0 var(--yellow);font-weight:700}.search-clear{position:absolute;right:9px;top:9px;width:40px;height:40px;border:0;border-radius:9px;background:#eef1f7;color:#4c5870;font-weight:900;display:none}.search-clear.visible{display:block}
+    .language-tabs{display:flex;gap:10px;margin:0 0 22px}.language-btn{display:flex;align-items:center;gap:9px;border:2px solid var(--navy);background:#fff;color:var(--navy);padding:10px 17px;border-radius:12px;font-weight:900;box-shadow:3px 3px 0 #cdd4e2}.language-btn.active{background:var(--navy);color:#fff;box-shadow:3px 3px 0 var(--lime)}.lang-glyph{display:grid;place-items:center;width:25px;height:25px;border-radius:7px;background:var(--yellow);color:var(--navy);font-size:.78rem}.library-grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:22px;align-items:start}.topic-rail,.lesson-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.topic-rail{position:sticky;top:94px;max-height:calc(100vh - 115px);overflow:auto;padding:18px}.rail-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.rail-head h2{font-size:1rem;margin:0}.topic-count{color:#6c7690;font-size:.85rem;font-weight:700}.topic-list{display:grid;gap:7px}.topic-btn{width:100%;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:10px;border:0;background:transparent;text-align:left;padding:9px;border-radius:11px;color:var(--ink)}.topic-btn:hover{background:#f0f3f8}.topic-btn.active{background:var(--navy);color:#fff}.topic-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#e9edff;color:#4254b4;font-weight:900;font-size:.8rem}.topic-btn.active .topic-icon{background:var(--lime);color:var(--navy)}.topic-title{font-weight:800;line-height:1.2}.topic-check{color:var(--green);font-weight:900}.topic-btn.active .topic-check{color:var(--lime)}
+    .lesson-card{min-height:650px;overflow:hidden}.lesson-top{padding:clamp(24px,4vw,48px);background:var(--navy);color:#fff;position:relative;overflow:hidden}.lesson-top:after{content:"</>";position:absolute;right:24px;bottom:-28px;font-size:8rem;font-weight:900;color:rgba(234,255,85,.08);line-height:1}.lesson-meta{display:flex;align-items:center;gap:10px;margin-bottom:15px;color:#c2cadc;font-size:.88rem;font-weight:800}.level-pill{padding:4px 9px;border-radius:999px;background:var(--lime);color:var(--navy)}.lesson-top h2{position:relative;z-index:1;margin-bottom:12px;font-size:clamp(1.8rem,4vw,3rem);line-height:1.05;letter-spacing:-.035em}.lesson-top p{position:relative;z-index:1;max-width:720px;margin:0;color:#cbd4e7;font-size:1.04rem}.lesson-body{padding:clamp(24px,4vw,44px)}.lesson-section{margin-bottom:32px;max-width:850px}.lesson-section h3{font-size:1.15rem;margin-bottom:10px}.lesson-section p{color:#4d5a70}.key-list{display:grid;gap:9px;padding:0;list-style:none}.key-list li{position:relative;padding-left:26px;color:#3f4b61}.key-list li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900}.code-block{border-radius:14px;overflow:hidden;background:#0f1729;color:#e8edfa;box-shadow:6px 6px 0 var(--lime)}.code-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#1b2741;border-bottom:1px solid #33405d;color:#aeb8cc;font-size:.86rem;font-weight:800}.copy-btn{border:1px solid #52617e;background:transparent;color:#fff;padding:5px 10px;border-radius:7px;font-weight:800}pre{margin:0;padding:20px;overflow:auto;white-space:pre;font:15px/1.65 Consolas,"Courier New",monospace;tab-size:2}.mini-task{margin-top:28px;padding:20px 22px;border:2px solid var(--navy);border-radius:14px;background:#fffbea;box-shadow:5px 5px 0 var(--yellow)}.mini-task strong{display:block;margin-bottom:6px}.lesson-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}.btn{border:2px solid var(--navy);border-radius:11px;padding:10px 16px;font-weight:900;transition:transform .15s ease}.btn:hover{transform:translateY(-2px)}.btn-primary{background:var(--navy);color:#fff;box-shadow:4px 4px 0 var(--lime)}.btn-secondary{background:#fff;color:var(--navy)}.btn-success{background:#e8fff3;color:#0f6e45;border-color:#15915a}
+    .search-results{display:none;background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.search-results.active{display:block}.results-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}.results-head h2{margin:0;font-size:1.15rem}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.result-card{border:1px solid var(--line);background:#fff;border-radius:13px;padding:17px;text-align:left;color:var(--ink)}.result-card:hover{border-color:#8d9fff;box-shadow:4px 4px 0 #dfe4ff}.result-language{display:inline-block;margin-bottom:8px;color:#4f60ba;font-size:.8rem;font-weight:900}.result-card strong{display:block;margin-bottom:5px;font-size:1.02rem}.result-card span:last-child{display:block;color:#657086;font-size:.9rem}.empty-search{grid-column:1/-1;padding:45px;text-align:center;color:#657086}
+    .practice-shell{max-width:1440px;margin:0 auto;padding:28px clamp(18px,4vw,54px) 56px}.practice-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px}.practice-head h1{font-size:clamp(2rem,4vw,3.5rem);margin-bottom:6px}.practice-head p{margin:0;color:#5d687e}.course-switcher{display:flex;gap:8px}.course-btn{border:2px solid var(--navy);background:#fff;color:var(--navy);padding:9px 15px;border-radius:10px;font-weight:900}.course-btn.active{background:var(--navy);color:#fff;box-shadow:3px 3px 0 var(--yellow)}.game-grid{display:grid;grid-template-columns:240px minmax(380px,1fr) minmax(310px,.75fr);gap:18px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.level-rail{padding:18px;position:sticky;top:94px}.level-rail h2{font-size:1rem;margin-bottom:12px}.progress-line{height:8px;border-radius:999px;background:#e4e8f0;overflow:hidden;margin-bottom:16px}.progress-fill{height:100%;width:0;background:var(--lime);border-right:2px solid var(--navy);transition:width .3s ease}.level-list{display:grid;gap:7px}.level-btn{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:10px;padding:9px;background:transparent;text-align:left;color:var(--ink);font-weight:800}.level-btn:hover{background:#f0f3f8}.level-btn.active{background:var(--navy);color:#fff}.level-number{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:8px;background:#e6eaff;color:#4254b4;font-weight:900}.level-btn.active .level-number{background:var(--lime);color:var(--navy)}.level-btn.done .level-number{background:#dffbed;color:var(--green)}.challenge{padding:clamp(20px,3vw,32px)}.mission-kicker{margin-bottom:5px;color:#5969bd;font-weight:900;font-size:.88rem}.challenge h2{font-size:clamp(1.5rem,3vw,2.25rem);line-height:1.1;margin-bottom:10px}.lesson-text{color:#526078}.goal{display:flex;gap:10px;margin:20px 0;padding:13px 15px;border-left:5px solid var(--yellow);background:#fff8d8;border-radius:8px}.editor-wrap{overflow:hidden;border-radius:14px;background:#0f1729}.editor-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:#1a2640;color:#b5bfd3;font-size:.84rem;font-weight:800}.window-dots{display:flex;gap:5px}.window-dots i{width:9px;height:9px;border-radius:50%;background:#ff6b6b}.window-dots i:nth-child(2){background:#ffd84a}.window-dots i:nth-child(3){background:#6ee7a8}#codeEditor{display:block;width:100%;min-height:280px;resize:vertical;border:0;padding:18px;background:#0f1729;color:#eff3ff;font:15px/1.6 Consolas,"Courier New",monospace;outline:0;tab-size:2}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.feedback{margin-top:14px;padding:13px 15px;border-radius:10px;font-weight:700}.feedback.win{background:#e5fff1;color:#0f6e45;border:1px solid #98e2ba}.feedback.try{background:#fff0f2;color:#9d2840;border:1px solid #f0a7b4}.hint{display:none;margin-top:14px;padding:13px 15px;border-radius:10px;background:#edf1ff;color:#394789;border:1px solid #bbc5ff}.hint.visible{display:block}.preview-column{display:grid;gap:18px}.preview-panel,.toolbox{padding:18px}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.panel-title h2{font-size:1rem;margin:0}.live-badge{font-size:.76rem;color:var(--green);font-weight:900}.browser-chrome{display:flex;gap:5px;padding:9px;background:#e8ecf4;border-radius:10px 10px 0 0}.browser-chrome span{width:8px;height:8px;border-radius:50%;background:#aab3c4}.browser-chrome .address{flex:1;border-radius:999px;margin-left:5px;background:#fff}#previewFrame{display:block;width:100%;height:300px;border:1px solid #d9deea;border-top:0;border-radius:0 0 10px 10px;background:#fff}.tag-row{display:flex;flex-wrap:wrap;gap:7px}.tag{padding:5px 9px;border-radius:7px;background:#edf0f7;color:#546077;font-size:.82rem;font-weight:800}.finish-overlay{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:20px;background:rgba(8,13,25,.78)}.finish-overlay.visible{display:grid}.finish-card{max-width:480px;padding:36px;border-radius:22px;background:#fff;text-align:center;box-shadow:10px 10px 0 var(--lime)}.finish-card .summit{font-size:3rem;color:var(--blue)}.finish-card h2{font-size:2rem;margin-bottom:8px}.finish-card p{color:#58647a}.toast{position:fixed;right:22px;bottom:22px;z-index:80;transform:translateY(130px);opacity:0;padding:12px 16px;border-radius:11px;background:var(--navy);color:#fff;font-weight:800;box-shadow:var(--shadow);transition:.25s ease}.toast.visible{transform:translateY(0);opacity:1}
+    @media(max-width:1050px){.game-grid{grid-template-columns:210px 1fr}.preview-column{grid-column:2}.library-grid{grid-template-columns:260px 1fr}}@media(max-width:760px){.topbar{grid-template-columns:auto auto;gap:12px}.brand-note{display:none}.primary-nav{grid-row:2;grid-column:1/-1}.xp-pill{justify-self:end}.learn-intro{grid-template-columns:1fr;gap:20px}.library-grid{grid-template-columns:1fr}.topic-rail{position:static;max-height:none}.topic-list{display:flex;overflow:auto;padding-bottom:5px}.topic-btn{min-width:210px}.result-grid{grid-template-columns:1fr}.practice-head{align-items:flex-start;flex-direction:column}.game-grid{grid-template-columns:1fr}.level-rail{position:static}.level-list{display:flex;overflow:auto}.level-btn{min-width:160px}.preview-column{grid-column:auto}}@media(max-width:480px){.topbar{padding:11px 14px}.brand-mark{width:36px;height:36px}.nav-btn{padding:8px 12px}.xp-pill{min-width:auto;padding:7px 10px}.learn-shell,.practice-shell{padding-left:14px;padding-right:14px}.language-tabs{overflow:auto}.lesson-top,.lesson-body{padding:22px}.lesson-actions .btn{width:100%}.search-input{font-size:.95rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
-  <div class="shell">
-    <header>
-      <div class="brand" aria-label="Apex coding learning game">
-        <span class="brand-mark" aria-hidden="true">A</span>
-        <span><span class="brand-name">Apex</span><span class="brand-note">Code, one climb at a time</span></span>
-      </div>
-      <div class="course-switcher" aria-label="Choose a language">
-        <button class="course-btn" data-language="html" aria-pressed="true">HTML</button>
-        <button class="course-btn" data-language="python" aria-pressed="false">Python</button>
-      </div>
-      <div class="climb" aria-label="Course progress">
-        <div class="climb-label"><span id="progressText">Base camp</span><span id="progressCount">0 of 5 complete</span></div>
-        <div class="trail"><div class="trail-fill" id="trailFill"></div></div>
-      </div>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Apex home"><span class="brand-mark" aria-hidden="true">A</span><span><span class="brand-name">Apex</span><span class="brand-note">Learn, then climb</span></span></a>
+      <nav class="primary-nav" aria-label="Main navigation"><button class="nav-btn active" data-view="learn">Learn topics</button><button class="nav-btn" data-view="practice">Puzzle game</button></nav>
       <div class="xp-pill"><span id="xp">0</span> XP</div>
     </header>
-
-    <main class="game-grid">
-      <aside class="panel level-rail" aria-label="Puzzle map">
-        <h2>Your climb</h2>
-        <nav class="level-list" id="levelList"></nav>
-        <p class="rail-tip">Run your code with <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. Mistakes cost nothing here.</p>
-      </aside>
-
-      <section class="panel challenge" aria-labelledby="missionTitle">
-        <div class="challenge-head">
-          <div class="mission-row">
-            <div>
-              <p class="mission-kicker" id="missionKicker">Puzzle 1 · First steps</p>
-              <h1 id="missionTitle">Give the page a headline</h1>
-            </div>
-            <span class="reward">+100 XP</span>
-          </div>
-          <p class="lesson" id="lessonText"></p>
-        </div>
-
-        <div class="goal"><strong>Goal</strong><span id="goalText"></span></div>
-
-        <div class="editor-wrap">
-          <div class="editor-bar">
-            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span id="editorFile">index.html</span>
-            <span id="editorLanguage">HTML</span>
-          </div>
-          <textarea id="codeEditor" aria-label="Code editor" spellcheck="false"></textarea>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary" id="runBtn">Check my code</button>
-          <button class="btn btn-secondary" id="hintBtn" aria-expanded="false">Give me a hint</button>
-          <button class="btn btn-quiet" id="resetBtn">Reset puzzle</button>
-        </div>
-
-        <div class="hint" id="hintBox" role="note"></div>
-        <div class="result" id="result" aria-live="polite"></div>
-      </section>
-
-      <aside class="preview-column">
-        <section class="panel preview-panel" aria-labelledby="previewTitle">
-          <div class="panel-title"><h2 id="previewTitle">Your tiny website</h2><span class="live-badge" id="previewStatus">Live preview</span></div>
-          <div class="browser-chrome" aria-hidden="true"><span></span><span></span><span></span><span class="address"></span></div>
-          <iframe id="preview" title="Preview of your HTML" sandbox=""></iframe>
-        </section>
-
-        <section class="panel toolbox" aria-labelledby="toolboxTitle">
-          <h2 id="toolboxTitle">Tag backpack</h2>
-          <p id="toolboxHelp">The tags you need for this puzzle glow blue.</p>
-          <div class="tag-row" id="tagRow"></div>
-        </section>
-      </aside>
+    <main>
+      <section class="view active" id="learnView"><div class="learn-shell">
+        <div class="learn-intro"><div><p class="eyebrow">Your coding field guide</p><h1>Find a topic. Learn it clearly.</h1><p class="intro-copy">Read a short lesson, study a real example, try a small task, then use the puzzle game to practice.</p></div><div class="search-box"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><label for="topicSearch" style="position:absolute;left:-9999px">Search lessons</label><input class="search-input" id="topicSearch" type="search" placeholder="Search HTML topics — forms, links, accessibility…" autocomplete="off"><button class="search-clear" id="searchClear" aria-label="Clear search">×</button></div></div>
+        <div class="language-tabs" aria-label="Choose a language"><button class="language-btn active" data-learn-language="html"><span class="lang-glyph">&lt;/&gt;</span>HTML course</button><button class="language-btn" data-learn-language="python"><span class="lang-glyph">Py</span>Python course</button></div>
+        <div class="library-grid" id="libraryGrid"><aside class="topic-rail" aria-label="Course topics"><div class="rail-head"><h2 id="railTitle">HTML topics</h2><span class="topic-count" id="topicCount"></span></div><nav class="topic-list" id="topicList"></nav></aside><article class="lesson-card" id="lessonCard" aria-live="polite"></article></div><section class="search-results" id="searchResults" aria-live="polite"></section>
+      </div></section>
+      <section class="view" id="practiceView"><div class="practice-shell">
+        <div class="practice-head"><div><h1>Practice arena</h1><p>Turn what you learned into working code. Mistakes cost nothing here.</p></div><div class="course-switcher" aria-label="Choose puzzle course"><button class="course-btn active" data-practice-language="html">HTML</button><button class="course-btn" data-practice-language="python">Python</button></div></div>
+        <div class="game-grid"><aside class="panel level-rail" aria-label="Puzzle map"><h2><span id="progressText">Base camp</span> · <span id="progressCount">0 of 5</span></h2><div class="progress-line"><div class="progress-fill" id="progressFill"></div></div><nav class="level-list" id="levelList"></nav></aside><section class="panel challenge" aria-labelledby="missionTitle"><p class="mission-kicker" id="missionKicker"></p><h2 id="missionTitle"></h2><p class="lesson-text" id="lessonText"></p><div class="goal"><strong>Goal</strong><span id="goalText"></span></div><div class="editor-wrap"><div class="editor-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="fileName">index.html</span></div><textarea id="codeEditor" spellcheck="false" aria-label="Code editor"></textarea></div><div class="actions"><button class="btn btn-primary" id="runBtn">Check my code</button><button class="btn btn-secondary" id="hintBtn" aria-expanded="false">Give me a hint</button><button class="btn btn-secondary" id="resetBtn">Reset puzzle</button></div><div class="hint" id="hintBox" role="note"></div><div id="result" aria-live="polite"></div></section><aside class="preview-column"><section class="panel preview-panel" aria-labelledby="previewTitle"><div class="panel-title"><h2 id="previewTitle">Your tiny website</h2><span class="live-badge">Live preview</span></div><div class="browser-chrome" aria-hidden="true"><span></span><span></span><span></span><span class="address"></span></div><iframe id="previewFrame" title="Your code preview" sandbox="allow-scripts"></iframe></section><section class="panel toolbox"><div class="panel-title"><h2>Skills in this puzzle</h2></div><div class="tag-row" id="tagRow"></div></section></aside></div>
+      </div></section>
     </main>
   </div>
-
-  <div class="finish-overlay" id="finishOverlay" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
-    <div class="finish-card">
-      <div class="summit" aria-hidden="true">▲</div>
-      <h2 id="finishTitle">You reached the summit!</h2>
-      <p id="finishText">You built headings, paragraphs, links, lists, and a complete content card. That is real HTML.</p>
-      <button class="btn" id="replayBtn">Climb again</button>
-    </div>
-  </div>
-
+  <div class="finish-overlay" id="finishOverlay" role="dialog" aria-modal="true" aria-labelledby="finishTitle"><div class="finish-card"><div class="summit" aria-hidden="true">▲</div><h2 id="finishTitle">You reached the summit!</h2><p id="finishText"></p><button class="btn btn-primary" id="replayBtn">Climb again</button></div></div><div class="toast" id="toast" role="status"></div>
   <script>
-    const puzzles = [
-      {
-        language: "html",
-        name: "Headline",
-        zone: "First steps",
-        title: "Give the page a headline",
-        lesson: "HTML uses tags to describe what content means. An <code>&lt;h1&gt;</code> tag marks the main heading on a page.",
-        goal: "Make a main heading that says “Hello, world!”",
-        starter: "<!-- Put your heading below -->\n",
-        hint: "Wrap the words in an opening and closing tag: <code>&lt;h1&gt;Hello, world!&lt;/h1&gt;</code>",
-        tags: ["<h1>", "</h1>"],
-        test(doc) {
-          const el = doc.querySelector("h1");
-          return el && el.textContent.trim().toLowerCase() === "hello, world!";
-        },
-        miss: "Almost! Add one <code>&lt;h1&gt;</code> whose text is exactly “Hello, world!”"
-      },
-      {
-        language: "html",
-        name: "Emphasis",
-        zone: "Meaning matters",
-        title: "Make one word stand strong",
-        lesson: "A paragraph uses <code>&lt;p&gt;</code>. Put important words inside <code>&lt;strong&gt;</code> so browsers and readers know they matter.",
-        goal: "Write a paragraph that says “HTML is fun” and make only “fun” strong.",
-        starter: "<p>HTML is fun</p>",
-        hint: "Place <code>&lt;strong&gt;</code> before “fun” and <code>&lt;/strong&gt;</code> after it.",
-        tags: ["<p>", "<strong>"],
-        test(doc) {
-          const p = doc.querySelector("p");
-          const strong = p?.querySelector("strong");
-          return p && strong && p.textContent.trim().toLowerCase() === "html is fun" && strong.textContent.trim().toLowerCase() === "fun";
-        },
-        miss: "Keep the sentence inside <code>&lt;p&gt;</code>, then wrap just “fun” in <code>&lt;strong&gt;</code>."
-      },
-      {
-        language: "html",
-        name: "Link",
-        zone: "Connect pages",
-        title: "Open a door to the web",
-        lesson: "Links use the <code>&lt;a&gt;</code> tag. The <code>href</code> attribute tells the browser where the link should go.",
-        goal: "Make the words “Visit MDN” link to https://developer.mozilla.org",
-        starter: "<a>Visit MDN</a>",
-        hint: "Add the destination inside the opening tag: <code>&lt;a href=&quot;https://developer.mozilla.org&quot;&gt;</code>",
-        tags: ["<a>", "href=\"…\""],
-        test(doc) {
-          const a = doc.querySelector("a");
-          return a && a.textContent.trim().toLowerCase() === "visit mdn" && a.getAttribute("href")?.replace(/\/$/, "") === "https://developer.mozilla.org";
-        },
-        miss: "The text is ready. Add an <code>href</code> with the full MDN address to the opening <code>&lt;a&gt;</code> tag."
-      },
-      {
-        language: "html",
-        name: "List",
-        zone: "Shape content",
-        title: "Pack a three-item list",
-        lesson: "An unordered list uses <code>&lt;ul&gt;</code>. Every item inside it gets its own <code>&lt;li&gt;</code> tag.",
-        goal: "Create a list with exactly three items: HTML, CSS, and JavaScript.",
-        starter: "<ul>\n  <li>HTML</li>\n</ul>",
-        hint: "Keep all three <code>&lt;li&gt;</code> elements between the opening and closing <code>&lt;ul&gt;</code> tags.",
-        tags: ["<ul>", "<li>"],
-        test(doc) {
-          const ul = doc.querySelector("ul");
-          const items = ul ? [...ul.children].filter(el => el.tagName === "LI").map(el => el.textContent.trim().toLowerCase()) : [];
-          return items.length === 3 && ["html", "css", "javascript"].every((name, i) => items[i] === name);
-        },
-        miss: "Your <code>&lt;ul&gt;</code> needs three <code>&lt;li&gt;</code> children in this order: HTML, CSS, JavaScript."
-      },
-      {
-        language: "html",
-        name: "Mini page",
-        zone: "Summit build",
-        title: "Build your first content card",
-        lesson: "Now combine tags. A <code>&lt;section&gt;</code> groups related content, while headings and paragraphs give it a clear structure.",
-        goal: "Inside a section, add an h2 saying “My first site”, a paragraph saying “Built at Apex”, and a button saying “Explore”.",
-        starter: "<section>\n  <!-- Build your card here -->\n</section>",
-        hint: "Your <code>&lt;section&gt;</code> needs three children: <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;button&gt;</code>.",
-        tags: ["<section>", "<h2>", "<p>", "<button>"],
-        test(doc) {
-          const s = doc.querySelector("section");
-          const h = s?.querySelector("h2");
-          const p = s?.querySelector("p");
-          const b = s?.querySelector("button");
-          return h?.textContent.trim().toLowerCase() === "my first site" && p?.textContent.trim().toLowerCase() === "built at apex" && b?.textContent.trim().toLowerCase() === "explore";
-        },
-        miss: "Check that the section contains an <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;button&gt;</code> with the requested words."
-      },
-      {
-        language: "python",
-        name: "Print",
-        zone: "Say hello",
-        title: "Make Python speak",
-        lesson: "Python uses <code>print()</code> to show words and results. Put text inside quotes so Python knows it is a string.",
-        goal: "Print the exact words “Hello, Python!”",
-        starter: "# Make Python say hello\n",
-        hint: "Put the message between quotes: <code>print(\"Hello, Python!\")</code>",
-        tags: ["print()", "\"text\""],
-        test(code) { return /print\s*\(\s*([\"'])Hello,\s*Python!\1\s*\)/.test(code); },
-        miss: "Use <code>print()</code> with “Hello, Python!” inside quotes."
-      },
-      {
-        language: "python",
-        name: "Variable",
-        zone: "Save a value",
-        title: "Give a number a name",
-        lesson: "A variable is a labeled box. Write a name, an equals sign, and a value. You can use that name again later.",
-        goal: "Create a variable named score with the value 10, then print score.",
-        starter: "score = 0\nprint(score)",
-        hint: "Change the first line to <code>score = 10</code>. Keep <code>print(score)</code> on the next line.",
-        tags: ["score = 10", "print(score)"],
-        test(code) { return /^\s*score\s*=\s*10\s*$/m.test(code) && /print\s*\(\s*score\s*\)/.test(code); },
-        miss: "Set <code>score</code> to 10, then pass the variable name to <code>print()</code>."
-      },
-      {
-        language: "python",
-        name: "String",
-        zone: "Work with words",
-        title: "Build a personal greeting",
-        lesson: "Strings are pieces of text inside quotes. The <code>+</code> sign can join two strings together.",
-        goal: "Set name to “Apex”, then print “Hello, Apex” by joining “Hello, ” and name.",
-        starter: "name = \"\"\nprint(\"Hello, \" + name)",
-        hint: "Give <code>name</code> the string value <code>\"Apex\"</code>. The second line is already ready.",
-        tags: ["name = \"Apex\"", "+"],
-        test(code) { return /^\s*name\s*=\s*([\"'])Apex\1\s*$/m.test(code) && /print\s*\(\s*([\"'])Hello,\s*\1\s*\+\s*name\s*\)/.test(code); },
-        miss: "Set <code>name = \"Apex\"</code>, then join it to <code>\"Hello, \"</code> with <code>+</code>."
-      },
-      {
-        language: "python",
-        name: "List",
-        zone: "Collect values",
-        title: "Pack a list of skills",
-        lesson: "A list keeps several values together inside square brackets. Positions start at zero, so <code>[1]</code> picks the second item.",
-        goal: "Create skills with “HTML” and “Python”, then print the second item.",
-        starter: "skills = [\"HTML\"]\nprint(skills[0])",
-        hint: "Add <code>\"Python\"</code> as the second list item, then change the index to <code>[1]</code>.",
-        tags: ["[]", "skills[1]"],
-        test(code) { return /skills\s*=\s*\[\s*([\"'])HTML\1\s*,\s*([\"'])Python\2\s*\]/.test(code) && /print\s*\(\s*skills\s*\[\s*1\s*\]\s*\)/.test(code); },
-        miss: "Your list needs HTML first and Python second. Print <code>skills[1]</code> to choose Python."
-      },
-      {
-        language: "python",
-        name: "Loop",
-        zone: "Summit build",
-        title: "Count with a loop",
-        lesson: "A <code>for</code> loop repeats indented code. <code>range(1, 4)</code> produces 1, 2, and 3.",
-        goal: "Use a for loop and range(1, 4) to print 1, 2, and 3 on separate lines.",
-        starter: "for step in range(1, 4):\n  # Print step here",
-        hint: "Under the loop, add two spaces and write <code>print(step)</code>.",
-        tags: ["for", "range()", "print(step)"],
-        test(code) { return /for\s+(\w+)\s+in\s+range\s*\(\s*1\s*,\s*4\s*\)\s*:\s*\n\s+print\s*\(\s*\1\s*\)/.test(code); },
-        miss: "Keep <code>range(1, 4)</code>, then indent <code>print(step)</code> beneath the loop."
-      }
-    ];
-
-    const state = {
-      current: 0,
-      language: "html",
-      complete: new Set(),
-      code: puzzles.map(p => p.starter),
-      lastByLanguage: { html: 0, python: 5 }
+    const curriculum={
+      html:[
+        {id:'structure',icon:'01',level:'Beginner',title:'Page structure',summary:'Build the skeleton every browser expects.',keywords:'doctype html head body title nesting',description:'Every HTML page begins with a small, predictable structure. The head describes the page; the body contains what people see.',points:['Use <!doctype html> so browsers use modern standards.','Put page information such as the title in <head>.','Put visible headings, text, and controls in <body>.','Indent nested elements so the structure is easy to read.'],code:`<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="utf-8">\n    <title>My first page</title>\n  </head>\n  <body>\n    <h1>Hello, web!</h1>\n  </body>\n</html>`,task:'Create a page with a title in the head and one h1 inside the body.'},
+        {id:'text',icon:'02',level:'Beginner',title:'Text and headings',summary:'Give writing a clear hierarchy.',keywords:'h1 h2 h3 p strong em blockquote text',description:'Headings organize ideas, while paragraphs hold normal text. Meaningful text elements make a page easier to scan and understand.',points:['Use one clear h1 for the page topic.','Move through h2 and h3 levels in order.','Use <strong> for importance and <em> for emphasis.','Do not choose a heading level only because of its visual size.'],code:`<article>\n  <h1>Beginner gardening</h1>\n  <p>Start with <strong>healthy soil</strong>.</p>\n  <h2>Choose a plant</h2>\n  <p>Herbs are <em>easy</em> to grow.</p>\n</article>`,task:'Write an article with one h1, two h2 headings, and a paragraph under each.'},
+        {id:'links',icon:'03',level:'Beginner',title:'Links and navigation',summary:'Connect pages and places.',keywords:'anchor a href target navigation nav url mailto',description:'Links turn separate documents into the web. A useful link tells people where it goes before they click.',points:['Set the destination with the href attribute.','Use relative paths for pages in the same site.','Use descriptive link text instead of “click here.”','Group major site links inside a <nav> element.'],code:`<nav aria-label="Main navigation">\n  <a href="/">Home</a>\n  <a href="/lessons.html">Lessons</a>\n  <a href="mailto:hello@example.com">Email us</a>\n</nav>`,task:'Make a navigation area with links to Home, About, and Contact pages.'},
+        {id:'images',icon:'04',level:'Beginner',title:'Images and figures',summary:'Add visuals that remain understandable.',keywords:'img src alt width height figure figcaption picture',description:'Images need a source and useful alternative text. Width and height help the browser reserve space before an image loads.',points:['Describe meaningful images with concise alt text.','Use alt="" for purely decorative images.','Add width and height to reduce layout movement.','Use <figure> and <figcaption> when a caption belongs to an image.'],code:`<figure>\n  <img src="mountain.jpg"\n       alt="Snowy mountain at sunrise"\n       width="800" height="500">\n  <figcaption>Morning light on the summit.</figcaption>\n</figure>`,task:'Add an image with helpful alt text and a caption.'},
+        {id:'lists',icon:'05',level:'Beginner',title:'Lists',summary:'Organize steps and related items.',keywords:'ul ol li ordered unordered description list dl',description:'Use an unordered list when order does not matter and an ordered list when the sequence is important.',points:['Put each list item inside <li>.','Choose <ol> for instructions or rankings.','Choose <ul> for collections with no required order.','Lists can be nested when items have sub-items.'],code:`<h2>Make tea</h2>\n<ol>\n  <li>Boil water</li>\n  <li>Add tea leaves</li>\n  <li>Steep for three minutes</li>\n</ol>`,task:'Create an ordered list that explains how to complete a simple task.'},
+        {id:'tables',icon:'06',level:'Intermediate',title:'Tables',summary:'Present real row-and-column data.',keywords:'table caption thead tbody tr th td scope',description:'Tables are for data, not page layout. Captions and header cells help everyone understand what each row and column means.',points:['Give the table a <caption>.','Use <th> for headers and <td> for data.','Add scope="col" or scope="row" to headers.','Use <thead> and <tbody> to group table sections.'],code:`<table>\n  <caption>Weekly study time</caption>\n  <thead><tr><th scope="col">Day</th><th scope="col">Minutes</th></tr></thead>\n  <tbody><tr><th scope="row">Monday</th><td>30</td></tr></tbody>\n</table>`,task:'Build a two-column table with a caption, header row, and three data rows.'},
+        {id:'forms',icon:'07',level:'Intermediate',title:'Forms and inputs',summary:'Collect information clearly and safely.',keywords:'form input label button textarea select checkbox radio validation',description:'Forms let people send information. Every field needs a label, and the browser can handle many basic validation rules for you.',points:['Connect <label for> to the input id.','Choose the correct input type, such as email or date.','Use required only when the information is truly required.','Use a real <button type="submit"> to submit the form.'],code:`<form>\n  <label for="email">Email address</label>\n  <input id="email" name="email" type="email" required>\n  <label for="topic">What do you want to learn?</label>\n  <textarea id="topic" name="topic"></textarea>\n  <button type="submit">Join class</button>\n</form>`,task:'Make a sign-up form with name and email fields plus a submit button.'},
+        {id:'semantic',icon:'08',level:'Intermediate',title:'Semantic layout',summary:'Describe what each region means.',keywords:'header main footer article section aside nav semantic div',description:'Semantic elements explain the role of content to browsers, search tools, and assistive technology.',points:['Use <main> once for the page’s primary content.','Use <article> for content that can stand on its own.','Use <section> for a named group of related content.','Use <div> when no semantic element fits.'],code:`<header>\n  <nav aria-label="Main navigation">...</nav>\n</header>\n<main>\n  <article>\n    <h1>Lesson title</h1>\n    <section aria-labelledby="example-heading">...</section>\n  </article>\n</main>\n<footer>© Apex</footer>`,task:'Replace generic div elements in a page with header, nav, main, article, and footer.'},
+        {id:'media',icon:'09',level:'Intermediate',title:'Audio and video',summary:'Embed media with controls and fallbacks.',keywords:'audio video source track captions controls poster',description:'HTML can play audio and video without a plug-in. Multiple sources and caption tracks make media more useful and accessible.',points:['Include the controls attribute for user control.','Provide more than one source format when needed.','Add captions with <track kind="captions">.','Include fallback text for unsupported browsers.'],code:`<video controls width="640" poster="lesson-cover.jpg">\n  <source src="lesson.mp4" type="video/mp4">\n  <track src="captions.vtt" kind="captions" srclang="en" label="English">\n  Your browser does not support video.\n</video>`,task:'Add a video with controls, a poster image, and an English caption track.'},
+        {id:'metadata',icon:'10',level:'Intermediate',title:'Metadata and SEO',summary:'Help browsers and search engines describe a page.',keywords:'meta title description viewport seo open graph head',description:'Metadata is not shown in the main page, but it controls the browser tab, mobile layout, and how search results describe your content.',points:['Give every page a specific <title>.','Write a useful meta description.','Include the viewport meta tag for mobile devices.','Set the document language on the <html> element.'],code:`<html lang="en">\n<head>\n  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <meta name="description" content="Short Python lessons for beginners.">\n  <title>Python lessons | Apex</title>\n</head>`,task:'Improve a page head with a title, language, viewport, and description.'},
+        {id:'accessibility',icon:'11',level:'Essential',title:'Accessibility',summary:'Build pages more people can use.',keywords:'accessibility aria keyboard focus alt label landmarks screen reader',description:'Accessible HTML starts with native elements, logical structure, labels, keyboard support, and useful alternatives for visual content.',points:['Prefer native buttons, links, inputs, and headings.','Keep heading levels and reading order logical.','Make every control usable with a keyboard.','Use ARIA only when native HTML cannot express the behavior.'],code:`<button type="button" aria-expanded="false" aria-controls="tips">Show tips</button>\n<section id="tips" hidden>\n  <h2>Helpful tips</h2>\n  <p>Use clear labels and visible focus styles.</p>\n</section>`,task:'Check a page for missing labels, alt text, heading order, and keyboard access.'},
+        {id:'responsive',icon:'12',level:'Intermediate',title:'Responsive HTML',summary:'Send the right content to different screens.',keywords:'responsive picture source srcset sizes viewport mobile',description:'CSS handles most responsive layout, while HTML can offer better image files for different screen sizes and formats.',points:['Always include the viewport meta tag.','Use srcset and sizes for responsive images.','Use <picture> when art direction or format changes.','Keep the same meaningful content across screen sizes.'],code:`<picture>\n  <source media="(min-width: 800px)" srcset="wide.jpg">\n  <img src="square.jpg" alt="Students coding together" width="600" height="600">\n</picture>`,task:'Use picture to show a wide image on large screens and a square image on small screens.'},
+        {id:'details',icon:'13',level:'Intermediate',title:'Interactive HTML',summary:'Use built-in disclosure and dialog elements.',keywords:'details summary dialog popover interactive',description:'Some interactions need little or no JavaScript because HTML includes disclosure, dialog, and popover features.',points:['Use <details> and <summary> for expandable information.','Use <dialog> for a focused modal or non-modal window.','Keep controls clearly named.','Test built-in interactions with keyboard navigation.'],code:`<details>\n  <summary>What is semantic HTML?</summary>\n  <p>Elements that describe the meaning of their content.</p>\n</details>`,task:'Create a three-question FAQ using details and summary.'},
+        {id:'data',icon:'14',level:'Advanced',title:'Data attributes',summary:'Store small custom values on elements.',keywords:'data attributes dataset custom javascript',description:'Attributes beginning with data- hold small pieces of custom information that JavaScript can read through dataset.',points:['Name custom attributes with the data- prefix.','Use lowercase kebab-case in HTML.','Read values through element.dataset in JavaScript.','Do not store sensitive information in the page.'],code:`<button data-level="3" data-language="html">Open lesson</button>\n<script>\n  const button = document.querySelector('button');\n  console.log(button.dataset.level);\n<\/script>`,task:'Add data-topic and data-level attributes to a lesson button.'},
+        {id:'validation',icon:'15',level:'Essential',title:'Validation and best practices',summary:'Write HTML that stays reliable.',keywords:'validate nesting closing tags standards devtools inspect',description:'Valid, readable HTML prevents surprising browser behavior and makes future changes safer.',points:['Close and nest elements correctly.','Keep ids unique on each page.','Quote attribute values consistently.','Use browser developer tools and an HTML validator to find mistakes.'],code:`<!-- Clear, consistent, and correctly nested -->\n<section aria-labelledby="course-title">\n  <h2 id="course-title">HTML course</h2>\n  <p>Fifteen focused lessons.</p>\n</section>`,task:'Inspect a page and fix one nesting error, one duplicate id, and one missing label.'}
+      ],
+      python:[
+        {id:'start',icon:'01',level:'Beginner',title:'Syntax and output',summary:'Run your first Python statements.',keywords:'print comments indentation syntax hello world',description:'Python code reads from top to bottom. Indentation is meaningful, and print() is the simplest way to see a result.',points:['Call print() with parentheses.','Start a comment with #.','Use four spaces for each indentation level.','Python is case-sensitive: name and Name are different.'],code:`# My first Python program\nname = "Apex"\nprint("Hello from", name)\nif name == "Apex":\n    print("Ready to climb!")`,task:'Print your name, then print one sentence about what you want to build.'},
+        {id:'variables',icon:'02',level:'Beginner',title:'Variables and types',summary:'Store text, numbers, and true-or-false values.',keywords:'variables int float str bool type conversion',description:'A variable gives a value a name. Python chooses the type from the value you assign, and you can convert between compatible types.',points:['Use clear snake_case variable names.','Common types include int, float, str, bool, and None.','Use type(value) to inspect a type.','Use int(), float(), and str() for conversion.'],code:`student_name = "Maya"\nlessons_done = 4\nscore = 92.5\nis_ready = True\nprint(type(score))`,task:'Create variables for a book title, page count, price, and whether you finished it.'},
+        {id:'numbers',icon:'03',level:'Beginner',title:'Numbers and operators',summary:'Calculate and compare values.',keywords:'math arithmetic operators modulo exponent comparison',description:'Python supports normal arithmetic plus useful operators for whole division, remainders, powers, and comparisons.',points:['Use +, -, *, and / for common arithmetic.','// performs floor division and % gives the remainder.','** raises a number to a power.','Comparison operators return True or False.'],code:`minutes = 135\nhours = minutes // 60\nremaining = minutes % 60\nprint(hours, "hours and", remaining, "minutes")\narea = 5 ** 2`,task:'Convert 367 seconds into whole minutes and remaining seconds.'},
+        {id:'strings',icon:'04',level:'Beginner',title:'Strings',summary:'Create, combine, and transform text.',keywords:'string f string slice methods split join replace',description:'Strings are sequences of characters. Python gives you indexing, slicing, methods, and f-strings for working with text.',points:['Use f-strings to insert values into text.','Indexes start at 0; negative indexes count from the end.','String methods return a new string.','Use split() and join() to move between text and lists.'],code:`language = "Python"\nlevel = 3\nmessage = f"I am learning {language} at level {level}."\nprint(message.upper())\nprint(language[0:3])`,task:'Create an f-string that includes your name and favorite topic, then print it in uppercase.'},
+        {id:'lists',icon:'05',level:'Beginner',title:'Lists and tuples',summary:'Keep ordered groups of values.',keywords:'list tuple append remove index slice mutable immutable',description:'Lists are ordered and changeable. Tuples are ordered but cannot be changed after creation.',points:['Use square brackets for lists and parentheses for tuples.','Append a list item with .append().','Use slicing to copy part of a sequence.','Choose a tuple for a fixed collection.'],code:`topics = ["variables", "loops", "functions"]\ntopics.append("files")\nprint(topics[1:3])\npoint = (12, 8)\nx, y = point`,task:'Make a list of three goals, add one more goal, and print the first two.'},
+        {id:'dicts',icon:'06',level:'Intermediate',title:'Dictionaries and sets',summary:'Store keyed data and unique values.',keywords:'dictionary dict key value set unique get items',description:'Dictionaries connect unique keys to values. Sets store unique values and make membership checks fast.',points:['Read a dictionary value by key or with .get().','Loop through key-value pairs with .items().','Dictionary keys must be hashable.','Sets automatically remove duplicates.'],code:`student = {"name": "Maya", "xp": 450}\nstudent["level"] = 5\nprint(student.get("name"))\ntags = {"html", "python", "html"}\nprint(tags)`,task:'Create a dictionary for a movie with title, year, and rating, then add a genre.'},
+        {id:'conditions',icon:'07',level:'Beginner',title:'Conditions',summary:'Choose which code should run.',keywords:'if elif else comparison boolean and or not',description:'Conditional statements run different blocks depending on whether an expression is true or false.',points:['Start with if, add elif choices, and finish with else.','End each condition line with a colon.','Indent the code inside each branch.','Combine checks with and, or, and not.'],code:`score = 84\nif score >= 90:\n    grade = "A"\nelif score >= 75:\n    grade = "B"\nelse:\n    grade = "Keep practicing"\nprint(grade)`,task:'Print a ticket price based on whether a person is a child, adult, or senior.'},
+        {id:'loops',icon:'08',level:'Beginner',title:'Loops',summary:'Repeat work without repeating code.',keywords:'for while range break continue enumerate loop',description:'A for loop visits items in a sequence. A while loop continues as long as its condition stays true.',points:['Use for when iterating through known items.','Use range() for a sequence of numbers.','Use enumerate() when you need position and value.','Make sure a while loop can eventually stop.'],code:`topics = ["HTML", "Python", "CSS"]\nfor number, topic in enumerate(topics, start=1):\n    print(number, topic)\ncountdown = 3\nwhile countdown > 0:\n    print(countdown)\n    countdown -= 1`,task:'Loop through five numbers and print whether each one is even or odd.'},
+        {id:'functions',icon:'09',level:'Intermediate',title:'Functions',summary:'Package reusable work with inputs and outputs.',keywords:'def parameter argument return docstring function',description:'Functions give a block of code a name. Parameters accept inputs, and return sends a result back to the caller.',points:['Define a function with def.','Give functions focused, verb-based names.','Return a result instead of printing when it will be reused.','Add a short docstring to explain non-obvious behavior.'],code:`def calculate_xp(puzzles, bonus=0):\n    """Return XP earned from completed puzzles."""\n    return puzzles * 100 + bonus\ntotal = calculate_xp(5, bonus=50)\nprint(total)`,task:'Write a function that accepts width and height and returns a rectangle’s area.'},
+        {id:'scope',icon:'10',level:'Intermediate',title:'Scope and imports',summary:'Know where names exist and reuse modules.',keywords:'scope local global import module standard library',description:'Names created inside a function are usually local. Imports let a program reuse tools from Python’s standard library or other modules.',points:['Prefer local variables over global state.','Import a full module when it keeps usage clear.','Use from module import name for focused imports.','Put reusable code in your own modules.'],code:`import math\ndef circle_area(radius):\n    factor = math.pi\n    return factor * radius ** 2\nprint(circle_area(4))`,task:'Import random and write a function that returns a number from 1 to 6.'},
+        {id:'errors',icon:'11',level:'Intermediate',title:'Errors and exceptions',summary:'Handle expected problems gracefully.',keywords:'try except else finally raise exception ValueError',description:'Exceptions report problems that happen while code runs. Catch errors you can meaningfully handle and let unexpected ones stay visible.',points:['Put risky code in a try block.','Catch specific exceptions, not a bare except.','Use else for work that runs only after success.','Raise a clear exception when input is invalid.'],code:`try:\n    age = int(input("Age: "))\nexcept ValueError:\n    print("Enter a whole number.")\nelse:\n    print(f"Next year you will be {age + 1}.")`,task:'Safely convert user input to a float and show a clear message for invalid text.'},
+        {id:'files',icon:'12',level:'Intermediate',title:'Files and JSON',summary:'Save and load useful data.',keywords:'file open read write with pathlib json load dump',description:'The with statement closes files automatically. JSON is a common text format for saving lists, dictionaries, strings, and numbers.',points:['Open text files with an explicit encoding.','Use with so files close even after an error.','Use json.dump() to save and json.load() to read.','Use pathlib.Path for readable file paths.'],code:`import json\nfrom pathlib import Path\nprogress = {"html": 8, "python": 5}\npath = Path("progress.json")\nwith path.open("w", encoding="utf-8") as file:\n    json.dump(progress, file, indent=2)`,task:'Save a dictionary of three favorite topics to a JSON file.'},
+        {id:'comprehensions',icon:'13',level:'Intermediate',title:'Comprehensions',summary:'Build collections from concise loops.',keywords:'list dictionary set comprehension filter transform',description:'Comprehensions create collections by transforming and optionally filtering another iterable.',points:['Keep comprehensions short enough to read at a glance.','Put the output expression first.','Add an if condition at the end to filter.','Use a normal loop for complex multi-step logic.'],code:`numbers = range(1, 11)\nsquares = [number ** 2 for number in numbers]\neven_squares = [value for value in squares if value % 2 == 0]\nprint(even_squares)`,task:'Use a list comprehension to make the lengths of words longer than four letters.'},
+        {id:'classes',icon:'14',level:'Advanced',title:'Classes and objects',summary:'Model data together with its behavior.',keywords:'class object init self method property inheritance oop',description:'A class is a blueprint for objects. It can keep related data and behavior together when simple functions and dictionaries are no longer enough.',points:['Initialize object data in __init__.','Use self to access the current object.','Prefer small classes with one clear responsibility.','Use composition before deep inheritance.'],code:`class Learner:\n    def __init__(self, name):\n        self.name = name\n        self.xp = 0\n    def complete_lesson(self):\n        self.xp += 50\nlearner = Learner("Maya")\nlearner.complete_lesson()`,task:'Create a Book class with title and pages, plus a method that describes the book.'},
+        {id:'iterators',icon:'15',level:'Advanced',title:'Generators and iterators',summary:'Produce values one at a time.',keywords:'generator yield iterator iterable next memory',description:'Generators use yield to produce values lazily. They are useful when a full collection would waste memory or take time to create.',points:['A generator function contains yield.','Values are produced only when requested.','Loop over generators just like other iterables.','A generator is exhausted after its values are used.'],code:`def countdown(start):\n    while start > 0:\n        yield start\n        start -= 1\nfor number in countdown(3):\n    print(number)`,task:'Write a generator that yields the first five even numbers.'},
+        {id:'testing',icon:'16',level:'Essential',title:'Testing and debugging',summary:'Prove code works and find problems faster.',keywords:'test assert unittest pytest debug breakpoint traceback',description:'Small tests make changes safer. Tracebacks, print checks, and a debugger help you understand what the program actually did.',points:['Test normal inputs, edge cases, and bad inputs.','Use assert for simple expectations in learning code.','Read tracebacks from the final line upward.','Keep functions small so they are easy to test.'],code:`def add_tax(price, rate):\n    return price * (1 + rate)\ndef test_add_tax():\n    assert add_tax(100, 0.05) == 105\n    assert add_tax(0, 0.20) == 0\ntest_add_tax()`,task:'Write three assertions for your rectangle-area function, including a zero value.'},
+        {id:'environments',icon:'17',level:'Intermediate',title:'Packages and environments',summary:'Install libraries without mixing projects.',keywords:'pip venv virtual environment package requirements',description:'A virtual environment gives each project its own installed packages, avoiding version conflicts between projects.',points:['Create an environment with python -m venv .venv.','Activate it before installing packages.','Install packages with python -m pip install.','Record project dependencies in a requirements file or project metadata.'],code:`# Run these commands in a terminal\npython -m venv .venv\n# Windows\n.venv\\Scripts\\activate\npython -m pip install requests\npython -m pip freeze > requirements.txt`,task:'Create a new project folder, make a virtual environment, and install one package.'},
+        {id:'async',icon:'18',level:'Advanced',title:'Async basics',summary:'Wait for many slow operations efficiently.',keywords:'async await asyncio coroutine concurrency task',description:'Async code can make progress on other tasks while waiting for network or file operations. It is concurrency, not automatic CPU parallelism.',points:['Define a coroutine with async def.','Pause for an awaitable with await.','Run a top-level coroutine with asyncio.run().','Use async for I/O-bound work with many waits.'],code:`import asyncio\nasync def lesson(name, delay):\n    await asyncio.sleep(delay)\n    return f"Finished {name}"\nasync def main():\n    results = await asyncio.gather(lesson("HTML", 1), lesson("Python", 1))\n    print(results)\nasyncio.run(main())`,task:'Create two small coroutines and run them together with asyncio.gather().' }
+      ]
     };
-
-    const els = {
-      list: document.querySelector("#levelList"), editor: document.querySelector("#codeEditor"), preview: document.querySelector("#preview"),
-      kicker: document.querySelector("#missionKicker"), title: document.querySelector("#missionTitle"), lesson: document.querySelector("#lessonText"),
-      goal: document.querySelector("#goalText"), hint: document.querySelector("#hintBox"), result: document.querySelector("#result"),
-      tags: document.querySelector("#tagRow"), xp: document.querySelector("#xp"), fill: document.querySelector("#trailFill"),
-      progressText: document.querySelector("#progressText"), progressCount: document.querySelector("#progressCount"), overlay: document.querySelector("#finishOverlay"),
-      editorFile: document.querySelector("#editorFile"), editorLanguage: document.querySelector("#editorLanguage"),
-      previewTitle: document.querySelector("#previewTitle"), previewStatus: document.querySelector("#previewStatus"),
-      toolboxTitle: document.querySelector("#toolboxTitle"), toolboxHelp: document.querySelector("#toolboxHelp"),
-      finishTitle: document.querySelector("#finishTitle"), finishText: document.querySelector("#finishText")
-    };
-
-    function escapeHtml(value) {
-      return value.replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    }
-
-    function loadSaved() {
-      try {
-        const saved = JSON.parse(localStorage.getItem("apex-progress"));
-        if (!saved) return;
-        state.current = Math.min(Math.max(Number(saved.current) || 0, 0), puzzles.length - 1);
-        state.language = saved.language === "python" ? "python" : puzzles[state.current].language;
-        state.complete = new Set((saved.complete || []).filter(i => Number.isInteger(i) && i >= 0 && i < puzzles.length));
-        if (Array.isArray(saved.code)) state.code = puzzles.map((p, i) => typeof saved.code[i] === "string" ? saved.code[i] : p.starter);
-        if (saved.lastByLanguage) {
-          state.lastByLanguage.html = Number.isInteger(saved.lastByLanguage.html) ? saved.lastByLanguage.html : 0;
-          state.lastByLanguage.python = Number.isInteger(saved.lastByLanguage.python) ? saved.lastByLanguage.python : 5;
-        }
-      } catch (_) {}
-    }
-
-    function save() {
-      localStorage.setItem("apex-progress", JSON.stringify({ current: state.current, language: state.language, complete: [...state.complete], code: state.code, lastByLanguage: state.lastByLanguage }));
-    }
-
-    function activeIndexes() {
-      return puzzles.map((p, index) => p.language === state.language ? index : -1).filter(index => index >= 0);
-    }
-
-    function switchLanguage(language) {
-      if (!['html', 'python'].includes(language)) return;
-      if (els.editor.value) state.code[state.current] = els.editor.value;
-      state.language = language;
-      const indexes = activeIndexes();
-      const remembered = state.lastByLanguage[language];
-      openPuzzle(indexes.includes(remembered) ? remembered : indexes[0], { focus: true });
-    }
-
-    function renderMap() {
-      const indexes = activeIndexes();
-      els.list.innerHTML = indexes.map((puzzleIndex, localIndex) => `
-        <button class="level-btn ${state.complete.has(puzzleIndex) ? "done" : ""}" data-level="${puzzleIndex}" ${puzzleIndex === state.current ? 'aria-current="step"' : ""}>
-          <span class="level-number">${state.complete.has(puzzleIndex) ? "✓" : localIndex + 1}</span>
-          <span class="level-name">${puzzles[puzzleIndex].name}</span>
-        </button>`).join("");
-      els.list.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openPuzzle(Number(btn.dataset.level))));
-      document.querySelectorAll(".course-btn").forEach(btn => btn.setAttribute("aria-pressed", String(btn.dataset.language === state.language)));
-    }
-
-    function updateProgress() {
-      const indexes = activeIndexes();
-      const count = indexes.filter(index => state.complete.has(index)).length;
-      const localIndex = indexes.indexOf(state.current) + 1;
-      els.xp.textContent = state.complete.size * 100;
-      els.fill.style.width = `${count / indexes.length * 100}%`;
-      els.progressCount.textContent = `${count} of ${indexes.length} ${state.language.toUpperCase()} complete`;
-      els.progressText.textContent = count === 0 ? "Base camp" : count === indexes.length ? "Summit reached" : `Climbing · puzzle ${localIndex}`;
-    }
-
-    function pythonOutput(code) {
-      const clean = code.replace(/#.*$/gm, "");
-      const loop = clean.match(/for\s+(\w+)\s+in\s+range\s*\(\s*(-?\d+)\s*,\s*(-?\d+)\s*\)\s*:\s*\n\s+print\s*\(\s*\1\s*\)/);
-      if (loop) {
-        const values = [];
-        for (let value = Number(loop[2]); value < Number(loop[3]) && values.length < 50; value++) values.push(value);
-        return values.join("\n");
-      }
-
-      const variables = {};
-      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*(-?\d+(?:\.\d+)?)\s*$/gm)) variables[match[1]] = match[2];
-      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*([\"'])(.*?)\2\s*$/gm)) variables[match[1]] = match[3];
-      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*\[(.*?)\]\s*$/gm)) {
-        variables[match[1]] = [...match[2].matchAll(/([\"'])(.*?)\1/g)].map(item => item[2]);
-      }
-
-      const output = [];
-      for (const match of clean.matchAll(/print\s*\(([^\n]*)\)/g)) {
-        const expression = match[1].trim();
-        const literal = expression.match(/^([\"'])(.*?)\1$/);
-        const joined = expression.match(/^([\"'])(.*?)\1\s*\+\s*(\w+)$/);
-        const indexed = expression.match(/^(\w+)\s*\[\s*(\d+)\s*\]$/);
-        if (joined && variables[joined[3]] !== undefined) output.push(joined[2] + variables[joined[3]]);
-        else if (indexed && Array.isArray(variables[indexed[1]])) output.push(variables[indexed[1]][Number(indexed[2])] ?? "");
-        else if (literal) output.push(literal[2]);
-        else if (variables[expression] !== undefined) output.push(String(variables[expression]));
-      }
-      return output.join("\n") || "Your output will appear here.";
-    }
-
-    function updatePreview() {
-      const code = els.editor.value;
-      state.code[state.current] = code;
-      const safeBase = state.language === "html"
-        ? `<!doctype html><html><head><style>body{font-family:Arial,sans-serif;padding:24px;color:#172033;line-height:1.5}h1,h2{line-height:1.1}a{color:#3b50d6}section{padding:22px;border:2px solid #172033;border-radius:14px;box-shadow:6px 6px 0 #eaff55}button{padding:9px 14px;border:0;border-radius:8px;background:#172033;color:white;font-weight:700}</style></head><body>${code}</body></html>`
-        : `<!doctype html><html><head><style>body{margin:0;padding:26px;background:#101522;color:#eaf2ff;font:16px/1.7 Consolas,monospace}.prompt{color:#ffd84a;margin-right:9px}pre{white-space:pre-wrap;margin:0}</style></head><body><pre><span class="prompt">›</span>${escapeHtml(pythonOutput(code))}</pre></body></html>`;
-      els.preview.srcdoc = safeBase;
-      save();
-    }
-
-    function openPuzzle(index, options = {}) {
-      if (!Number.isInteger(index) || !puzzles[index]) return;
-      if (els.editor.value) state.code[state.current] = els.editor.value;
-      state.current = Math.min(Math.max(index, 0), puzzles.length - 1);
-      const p = puzzles[state.current];
-      state.language = p.language;
-      state.lastByLanguage[state.language] = state.current;
-      document.body.dataset.language = state.language;
-      const localIndex = activeIndexes().indexOf(state.current) + 1;
-      els.kicker.textContent = `Puzzle ${localIndex} · ${p.zone}`;
-      els.title.textContent = p.title;
-      els.lesson.innerHTML = p.lesson;
-      els.goal.textContent = p.goal;
-      els.editor.value = state.code[state.current];
-      els.editor.setAttribute("aria-label", `${state.language === "html" ? "HTML" : "Python"} code editor`);
-      els.editorFile.textContent = state.language === "html" ? "index.html" : "main.py";
-      els.editorLanguage.textContent = state.language === "html" ? "HTML" : "Python";
-      els.previewTitle.textContent = state.language === "html" ? "Your tiny website" : "Python console";
-      els.previewStatus.textContent = state.language === "html" ? "Live preview" : "Live output";
-      els.toolboxTitle.textContent = state.language === "html" ? "Tag backpack" : "Python toolkit";
-      els.toolboxHelp.textContent = state.language === "html" ? "The tags you need for this puzzle glow blue." : "The Python pieces you need for this puzzle glow blue.";
-      els.hint.innerHTML = p.hint;
-      els.hint.classList.remove("show");
-      const hintButton = document.querySelector("#hintBtn");
-      hintButton.setAttribute("aria-expanded", "false");
-      hintButton.textContent = "Give me a hint";
-      els.result.innerHTML = "";
-      els.tags.innerHTML = p.tags.map(tag => `<span class="tag active">${escapeHtml(tag)}</span>`).join("");
-      renderMap();
-      updateProgress();
-      updatePreview();
-      if (options.focus) els.editor.focus();
-    }
-
-    function checkSolution(options = {}) {
-      const p = puzzles[state.current];
-      const testInput = p.language === "html" ? new DOMParser().parseFromString(els.editor.value, "text/html") : els.editor.value;
-      const passed = Boolean(p.test(testInput));
-      const indexes = activeIndexes();
-      const localIndex = indexes.indexOf(state.current);
-      if (!passed) {
-        els.result.innerHTML = `<div class="feedback try"><strong>Not quite yet.</strong>${p.miss}</div>`;
-        return { passed: false, language: state.language, puzzle: localIndex + 1, message: "The solution does not meet the puzzle goal yet." };
-      }
-
-      const wasDone = state.complete.has(state.current);
-      state.complete.add(state.current);
-      save();
-      renderMap();
-      updateProgress();
-      const isLast = localIndex === indexes.length - 1;
-      const courseComplete = indexes.every(index => state.complete.has(index));
-      const successDetail = state.language === "html" ? "Your HTML has the right structure." : "Your Python gives the right result.";
-      const remaining = indexes.filter(index => !state.complete.has(index)).length;
-      const resultDetail = isLast
-        ? (courseComplete ? `You finished the ${state.language === "html" ? "HTML" : "Python"} climb.` : `${successDetail} Clear ${remaining} more ${remaining === 1 ? "puzzle" : "puzzles"} to reach the summit.`)
-        : `${successDetail} Ready for the next climb?`;
-      els.result.innerHTML = `<div class="feedback win"><strong>${wasDone ? "Still correct!" : "Perfect — puzzle cleared!"}</strong>${resultDetail}</div>`;
-
-      if (isLast) {
-        if (courseComplete) {
-          els.finishTitle.textContent = `${state.language === "html" ? "HTML" : "Python"} summit reached!`;
-          els.finishText.textContent = state.language === "html"
-            ? "You built headings, paragraphs, links, lists, and a complete content card. That is real HTML."
-            : "You printed messages, used variables and strings, explored lists, and wrote your first loop. That is real Python.";
-          setTimeout(() => els.overlay.classList.add("show"), options.instant ? 0 : 550);
-        }
-      } else if (!options.stay) {
-        setTimeout(() => openPuzzle(indexes[localIndex + 1], { focus: true }), options.instant ? 0 : 850);
-      }
-      return { passed: true, language: state.language, puzzle: localIndex + 1, completed: indexes.filter(index => state.complete.has(index)).length, xp: state.complete.size * 100 };
-    }
-
-    document.querySelector("#runBtn").addEventListener("click", () => { updatePreview(); checkSolution(); });
-    document.querySelector("#hintBtn").addEventListener("click", event => {
-      const show = !els.hint.classList.contains("show");
-      els.hint.classList.toggle("show", show);
-      event.currentTarget.setAttribute("aria-expanded", String(show));
-      event.currentTarget.textContent = show ? "Hide hint" : "Give me a hint";
-    });
-    document.querySelector("#resetBtn").addEventListener("click", () => {
-      state.code[state.current] = puzzles[state.current].starter;
-      els.editor.value = state.code[state.current];
-      els.result.innerHTML = "";
-      updatePreview();
-      els.editor.focus();
-    });
-    document.querySelector("#replayBtn").addEventListener("click", () => {
-      const indexes = activeIndexes();
-      indexes.forEach(index => {
-        state.complete.delete(index);
-        state.code[index] = puzzles[index].starter;
-      });
-      els.overlay.classList.remove("show");
-      save();
-      openPuzzle(indexes[0], { focus: true });
-    });
-    document.querySelectorAll(".course-btn").forEach(btn => btn.addEventListener("click", () => switchLanguage(btn.dataset.language)));
-    els.editor.addEventListener("input", updatePreview);
-    els.editor.addEventListener("keydown", event => {
-      if (event.key === "Tab") {
-        event.preventDefault();
-        const start = els.editor.selectionStart;
-        els.editor.setRangeText("  ", start, els.editor.selectionEnd, "end");
-        updatePreview();
-      }
-      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-        event.preventDefault();
-        updatePreview();
-        checkSolution();
-      }
-    });
-
-    function registerWebMCP() {
-      const context = document.modelContext;
-      if (!context?.registerTool) return;
-      const tools = [
-        {
-          name: "open_code_puzzle",
-          title: "Open coding puzzle",
-          description: "Open one of the five HTML or Python puzzles in the visible Apex game.",
-          inputSchema: { type: "object", properties: { language: { type: "string", enum: ["html", "python"] }, puzzle: { type: "integer", minimum: 1, maximum: 5 } }, required: ["language", "puzzle"], additionalProperties: false },
-          annotations: { readOnlyHint: false, untrustedContentHint: false },
-          execute(input) {
-            if (!['html', 'python'].includes(input?.language)) throw new Error("Language must be html or python.");
-            if (!Number.isInteger(input?.puzzle) || input.puzzle < 1 || input.puzzle > 5) throw new Error("Puzzle must be an integer from 1 to 5.");
-            const indexes = puzzles.map((p, index) => p.language === input.language ? index : -1).filter(index => index >= 0);
-            openPuzzle(indexes[input.puzzle - 1]);
-            return { language: input.language, puzzle: input.puzzle, title: puzzles[indexes[input.puzzle - 1]].title };
-          }
-        },
-        {
-          name: "set_code",
-          title: "Set puzzle code",
-          description: "Place code into the visible Apex editor and refresh the HTML preview or Python console without checking the answer.",
-          inputSchema: { type: "object", properties: { code: { type: "string", maxLength: 10000 } }, required: ["code"], additionalProperties: false },
-          annotations: { readOnlyHint: false, untrustedContentHint: false },
-          execute(input) {
-            if (typeof input?.code !== "string" || input.code.length > 10000) throw new Error("Code must be a string under 10,000 characters.");
-            els.editor.value = input.code;
-            updatePreview();
-            return { language: state.language, puzzle: activeIndexes().indexOf(state.current) + 1, updated: true };
-          }
-        },
-        {
-          name: "submit_code_solution",
-          title: "Submit coding solution",
-          description: "Check the code currently visible in the Apex editor against the active HTML or Python puzzle goal.",
-          inputSchema: { type: "object", properties: {}, additionalProperties: false },
-          annotations: { readOnlyHint: false, untrustedContentHint: false },
-          execute() { return checkSolution({ stay: true, instant: true }); }
-        }
-      ];
-      tools.forEach(tool => { try { Promise.resolve(context.registerTool(tool)).catch(() => {}); } catch (_) {} });
-    }
-
-    loadSaved();
-    openPuzzle(state.current);
-    registerWebMCP();
+    const puzzles={html:[
+      {name:'Hello, HTML',title:'Build your first heading',lesson:'HTML tags describe the parts of a page. Most tags have an opening and a closing tag.',goal:'Create an <h1> that says Hello, Apex!',starter:'<!-- Write your heading below -->\n',hint:'Use <h1>Hello, Apex!</h1>',tags:['h1','opening tag','closing tag'],check:c=>/<h1(?:\s[^>]*)?>\s*Hello,\s*Apex!\s*<\/h1>/i.test(c),miss:'Add an h1 with the exact words “Hello, Apex!”'},
+      {name:'Say something',title:'Add a paragraph',lesson:'Paragraphs use the <p> element. They are the main building blocks for normal text.',goal:'Add a paragraph that includes the word learning.',starter:'<h1>Hello, Apex!</h1>\n<!-- Add a paragraph -->',hint:'Try <p>I am learning HTML.</p>',tags:['p','text content'],check:c=>/<p(?:\s[^>]*)?>[^<]*learning[^<]*<\/p>/i.test(c),miss:'Add a paragraph containing the word “learning.”'},
+      {name:'Make a link',title:'Connect to another page',lesson:'An anchor element creates a link. Its href attribute tells the browser where to go.',goal:'Create a link to https://example.com with visible text Visit example.',starter:'<h1>Useful links</h1>\n',hint:'Use <a href="https://example.com">Visit example</a>',tags:['a','href','URL'],check:c=>/<a\s+[^>]*href=["']https:\/\/example\.com["'][^>]*>\s*Visit example\s*<\/a>/i.test(c),miss:'Check the href and the visible link text.'},
+      {name:'Picture it',title:'Add an accessible image',lesson:'The alt attribute explains an image when it cannot be seen.',goal:'Add an image with src="mountain.jpg" and alt text containing mountain.',starter:'<h1>My gallery</h1>\n',hint:'Try <img src="mountain.jpg" alt="A tall mountain">',tags:['img','src','alt'],check:c=>/<img\s+(?=[^>]*src=["']mountain\.jpg["'])(?=[^>]*alt=["'][^"']*mountain[^"']*["'])[^>]*>/i.test(c),miss:'Your img needs the correct src and useful alt text.'},
+      {name:'Create a section',title:'Build a semantic card',lesson:'A <section> groups related content. Give it a heading so its purpose is clear.',goal:'Create a section containing an h2 and a button.',starter:'<!-- Build your section here -->\n',hint:'Put both <h2>...</h2> and <button>...</button> inside <section>...</section>.',tags:['section','h2','button'],check:c=>/<section(?:\s[^>]*)?>[\s\S]*<h2(?:\s[^>]*)?>[\s\S]*<\/h2>[\s\S]*<button(?:\s[^>]*)?>[\s\S]*<\/button>[\s\S]*<\/section>/i.test(c),miss:'Make sure the h2 and button are both inside the section.'}
+    ],python:[
+      {name:'Hello, Python',title:'Print your first message',lesson:'print() displays text. Text values go inside matching quote marks.',goal:'Print the exact words Hello, Apex!',starter:'# Write your code below\n',hint:'Use print("Hello, Apex!")',tags:['print','string'],check:c=>/print\s*\(\s*["']Hello, Apex!["']\s*\)/.test(c),miss:'Call print() with the exact text “Hello, Apex!”'},
+      {name:'Name a value',title:'Create a variable',lesson:'A variable stores a value under a useful name. Use = to assign a value.',goal:'Create a variable named language with the value "Python".',starter:'# Store the language below\n',hint:'Use language = "Python"',tags:['variable','assignment','string'],check:c=>/^\s*language\s*=\s*["']Python["']/m.test(c),miss:'Assign the string “Python” to a variable named language.'},
+      {name:'Make a decision',title:'Use an if statement',lesson:'An if statement runs an indented block only when its condition is true.',goal:'If score is at least 10, print Level up!',starter:'score = 12\n\n# Add your if statement\n',hint:'Use if score >= 10: on one line and indent the print below it.',tags:['if','comparison','indentation'],check:c=>/if\s+score\s*>=\s*10\s*:\s*\n\s+print\s*\(\s*["']Level up!["']\s*\)/.test(c),miss:'Check the >= comparison, colon, and indented print.'},
+      {name:'Loop the trail',title:'Repeat with a loop',lesson:'A for loop visits each value in a sequence and runs the indented block.',goal:'Loop through range(3) and print number.',starter:'# Write your loop below\n',hint:'Use for number in range(3): and indent print(number).',tags:['for','range','iteration'],check:c=>/for\s+number\s+in\s+range\s*\(\s*3\s*\)\s*:\s*\n\s+print\s*\(\s*number\s*\)/.test(c),miss:'Use number, range(3), a colon, and an indented print(number).'},
+      {name:'Build a function',title:'Create reusable code',lesson:'A function groups code under a name. return sends a result back.',goal:'Define greet(name) and return "Hello, " + name.',starter:'# Define your function below\n',hint:'Use def greet(name): followed by an indented return "Hello, " + name.',tags:['def','parameter','return'],check:c=>/def\s+greet\s*\(\s*name\s*\)\s*:\s*\n\s+return\s+["']Hello, ["']\s*\+\s*name/.test(c),miss:'Define greet(name) and return the greeting from inside it.'}
+    ]};
+    const storeKey='apex-learning-hub-v1',defaultCode={html:puzzles.html.map(p=>p.starter),python:puzzles.python.map(p=>p.starter)};
+    const state={view:'learn',learnLanguage:'html',topic:{html:0,python:0},completedTopics:{html:new Set(),python:new Set()},practiceLanguage:'html',puzzle:{html:0,python:0},completedPuzzles:{html:new Set(),python:new Set()},code:defaultCode};
+    function loadState(){try{const saved=JSON.parse(localStorage.getItem(storeKey)||'{}');state.view=saved.view==='practice'?'practice':'learn';state.learnLanguage=saved.learnLanguage==='python'?'python':'html';state.practiceLanguage=saved.practiceLanguage==='python'?'python':'html';['html','python'].forEach(lang=>{state.topic[lang]=Math.min(Math.max(saved.topic?.[lang]||0,0),curriculum[lang].length-1);state.puzzle[lang]=Math.min(Math.max(saved.puzzle?.[lang]||0,0),puzzles[lang].length-1);state.completedTopics[lang]=new Set((saved.completedTopics?.[lang]||[]).filter(i=>i>=0&&i<curriculum[lang].length));state.completedPuzzles[lang]=new Set((saved.completedPuzzles?.[lang]||[]).filter(i=>i>=0&&i<puzzles[lang].length));if(Array.isArray(saved.code?.[lang]))state.code[lang]=puzzles[lang].map((p,i)=>typeof saved.code[lang][i]==='string'?saved.code[lang][i]:p.starter)})}catch{}}
+    function saveState(){localStorage.setItem(storeKey,JSON.stringify({view:state.view,learnLanguage:state.learnLanguage,practiceLanguage:state.practiceLanguage,topic:state.topic,puzzle:state.puzzle,completedTopics:{html:[...state.completedTopics.html],python:[...state.completedTopics.python]},completedPuzzles:{html:[...state.completedPuzzles.html],python:[...state.completedPuzzles.python]},code:state.code}))}
+    const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const els={xp:$('#xp'),topicSearch:$('#topicSearch'),searchClear:$('#searchClear'),libraryGrid:$('#libraryGrid'),searchResults:$('#searchResults'),railTitle:$('#railTitle'),topicCount:$('#topicCount'),topicList:$('#topicList'),lessonCard:$('#lessonCard'),levelList:$('#levelList'),progressText:$('#progressText'),progressCount:$('#progressCount'),progressFill:$('#progressFill'),missionKicker:$('#missionKicker'),missionTitle:$('#missionTitle'),lessonText:$('#lessonText'),goalText:$('#goalText'),fileName:$('#fileName'),editor:$('#codeEditor'),hint:$('#hintBox'),result:$('#result'),frame:$('#previewFrame'),previewTitle:$('#previewTitle'),tags:$('#tagRow'),finish:$('#finishOverlay'),finishText:$('#finishText'),toast:$('#toast')};
+    function totalXp(){return(state.completedTopics.html.size+state.completedTopics.python.size)*25+(state.completedPuzzles.html.size+state.completedPuzzles.python.size)*100}function updateXp(){els.xp.textContent=totalXp()}function showToast(m){els.toast.textContent=m;els.toast.classList.add('visible');clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>els.toast.classList.remove('visible'),1800)}
+    function setView(view){state.view=view;$$('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));$$('.view').forEach(v=>v.classList.toggle('active',v.id===view+'View'));if(view==='practice')renderPractice();saveState();window.scrollTo({top:0,behavior:'smooth'})}
+    function renderTopicList(){const lang=state.learnLanguage;els.railTitle.textContent=(lang==='html'?'HTML':'Python')+' topics';els.topicCount.textContent=`${state.completedTopics[lang].size}/${curriculum[lang].length} learned`;els.topicList.innerHTML=curriculum[lang].map((t,i)=>`<button class="topic-btn ${i===state.topic[lang]?'active':''}" data-topic-index="${i}" ${i===state.topic[lang]?'aria-current="page"':''}><span class="topic-icon">${t.icon}</span><span class="topic-title">${esc(t.title)}</span><span class="topic-check">${state.completedTopics[lang].has(i)?'✓':''}</span></button>`).join('')}
+    function renderLesson(){const lang=state.learnLanguage,t=curriculum[lang][state.topic[lang]],done=state.completedTopics[lang].has(state.topic[lang]);els.lessonCard.innerHTML=`<header class="lesson-top"><div class="lesson-meta"><span class="level-pill">${esc(t.level)}</span><span>${lang==='html'?'HTML':'Python'} lesson ${state.topic[lang]+1} of ${curriculum[lang].length}</span></div><h2>${esc(t.title)}</h2><p>${esc(t.description)}</p></header><div class="lesson-body"><section class="lesson-section"><h3>What to remember</h3><ul class="key-list">${t.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></section><section class="lesson-section"><h3>Example</h3><div class="code-block"><div class="code-bar"><span>${lang==='html'?'HTML':'Python'}</span><button class="copy-btn" data-copy-code>Copy code</button></div><pre><code>${esc(t.code)}</code></pre></div></section><div class="mini-task"><strong>Try it yourself</strong><span>${esc(t.task)}</span></div><div class="lesson-actions"><button class="btn ${done?'btn-success':'btn-primary'}" id="completeTopic">${done?'✓ Lesson learned':'Mark as learned · +25 XP'}</button><button class="btn btn-secondary" id="practiceTopic">Open puzzle game</button><button class="btn btn-secondary" id="nextTopic">Next topic</button></div></div>`;renderTopicList();updateXp()}
+    function setLearnLanguage(lang){state.learnLanguage=lang;$$('[data-learn-language]').forEach(b=>b.classList.toggle('active',b.dataset.learnLanguage===lang));els.topicSearch.placeholder=`Search ${lang==='html'?'HTML':'Python'} topics — ${lang==='html'?'forms, links, accessibility':'loops, files, classes'}…`;els.topicSearch.value='';renderSearch('');renderTopicList();renderLesson();saveState()}
+    function openTopic(lang,index){state.learnLanguage=lang;state.topic[lang]=index;$$('[data-learn-language]').forEach(b=>b.classList.toggle('active',b.dataset.learnLanguage===lang));els.topicSearch.value='';renderSearch('');renderLesson();saveState();els.lessonCard.scrollIntoView({behavior:'smooth',block:'start'})}
+    function renderSearch(query){const q=query.trim().toLowerCase();els.searchClear.classList.toggle('visible',Boolean(q));els.libraryGrid.style.display=q?'none':'';els.searchResults.classList.toggle('active',Boolean(q));if(!q)return;const lang=state.learnLanguage,matches=curriculum[lang].map((t,i)=>({t,i})).filter(({t})=>`${t.title} ${t.summary} ${t.description} ${t.keywords}`.toLowerCase().includes(q));els.searchResults.innerHTML=`<div class="results-head"><h2>${matches.length} ${lang==='html'?'HTML':'Python'} topic${matches.length===1?'':'s'} found</h2><span>Search: “${esc(query.trim())}”</span></div><div class="result-grid">${matches.length?matches.map(({t,i})=>`<button class="result-card" data-search-index="${i}"><span class="result-language">${lang==='html'?'HTML':'PYTHON'} · ${esc(t.level)}</span><strong>${esc(t.title)}</strong><span>${esc(t.summary)}</span></button>`).join(''):`<div class="empty-search"><strong>No lesson matched that search.</strong><br>Try a word such as ${lang==='html'?'forms, images, tables, or accessibility':'loops, strings, files, or classes'}.</div>`}</div>`}
+    function completeCurrentTopic(){const lang=state.learnLanguage,i=state.topic[lang];if(state.completedTopics[lang].has(i)){state.completedTopics[lang].delete(i);showToast('Lesson marked incomplete')}else{state.completedTopics[lang].add(i);showToast('+25 XP · Lesson learned')}renderLesson();saveState()}function nextTopic(){const lang=state.learnLanguage;state.topic[lang]=(state.topic[lang]+1)%curriculum[lang].length;renderLesson();saveState();els.lessonCard.scrollIntoView({behavior:'smooth',block:'start'})}function copyCode(){const code=curriculum[state.learnLanguage][state.topic[state.learnLanguage]].code;navigator.clipboard?.writeText(code).then(()=>showToast('Code copied')).catch(()=>showToast('Select the example to copy it'))}
+    function pythonOutput(code){const out=[],variables={};code.split(/\r?\n/).forEach(line=>{const a=line.match(/^\s*([A-Za-z_]\w*)\s*=\s*(.+)\s*$/);if(a&&!line.trim().startsWith('if ')){let v=a[2].trim();if(/^['"].*['"]$/.test(v))v=v.slice(1,-1);else if(!Number.isNaN(Number(v)))v=Number(v);variables[a[1]]=v}const p=line.match(/^\s*print\s*\((.*)\)\s*$/);if(p){out.push(p[1].split(',').map(part=>{const x=part.trim();if(/^['"].*['"]$/.test(x))return x.slice(1,-1);if(Object.prototype.hasOwnProperty.call(variables,x))return variables[x];return x}).join(' '))}});return out.length?out.join('\n'):'Run a print() statement to see output here.'}
+    function updatePreview(){const lang=state.practiceLanguage,code=els.editor.value;if(lang==='html')els.frame.srcdoc=`<!doctype html><html><head><style>body{font-family:Arial,sans-serif;padding:22px;color:#172033;line-height:1.5}h1,h2{line-height:1.15}a{color:#4057d8}section{padding:18px;border:2px solid #172033;border-radius:12px}button{padding:9px 13px;border:0;border-radius:8px;background:#172033;color:white;font-weight:700}</style></head><body>${code}</body></html>`;else els.frame.srcdoc=`<!doctype html><html><head><style>body{margin:0;padding:23px;background:#101522;color:#eaf2ff;font:16px/1.7 Consolas,monospace}.prompt{color:#ffd84a}pre{white-space:pre-wrap}</style></head><body><pre><span class="prompt">› </span>${esc(pythonOutput(code))}</pre></body></html>`}
+    function renderPractice(){const lang=state.practiceLanguage,i=state.puzzle[lang],p=puzzles[lang][i],done=state.completedPuzzles[lang].size;$$('[data-practice-language]').forEach(b=>b.classList.toggle('active',b.dataset.practiceLanguage===lang));els.levelList.innerHTML=puzzles[lang].map((item,n)=>`<button class="level-btn ${n===i?'active':''} ${state.completedPuzzles[lang].has(n)?'done':''}" data-puzzle-index="${n}"><span class="level-number">${state.completedPuzzles[lang].has(n)?'✓':n+1}</span>${esc(item.name)}</button>`).join('');els.progressText.textContent=done===0?'Base camp':done===puzzles[lang].length?'Summit reached':`${done} cleared`;els.progressCount.textContent=`${done} of ${puzzles[lang].length}`;els.progressFill.style.width=`${done/puzzles[lang].length*100}%`;els.missionKicker.textContent=`Puzzle ${i+1} · ${lang==='html'?'HTML':'Python'}`;els.missionTitle.textContent=p.title;els.lessonText.textContent=p.lesson;els.goalText.textContent=p.goal;els.fileName.textContent=lang==='html'?'index.html':'main.py';els.editor.value=state.code[lang][i];els.hint.textContent=p.hint;els.hint.classList.remove('visible');$('#hintBtn').setAttribute('aria-expanded','false');els.result.innerHTML='';els.previewTitle.textContent=lang==='html'?'Your tiny website':'Python console';els.tags.innerHTML=p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('');updatePreview();updateXp();saveState()}
+    function setPracticeLanguage(lang){state.practiceLanguage=lang;renderPractice()}function checkPuzzle(){const lang=state.practiceLanguage,i=state.puzzle[lang],p=puzzles[lang][i],code=els.editor.value;state.code[lang][i]=code;if(!p.check(code)){els.result.innerHTML=`<div class="feedback try"><strong>Not quite yet.</strong> ${esc(p.miss)}</div>`;saveState();return}const first=!state.completedPuzzles[lang].has(i);state.completedPuzzles[lang].add(i);renderPractice();els.result.innerHTML=`<div class="feedback win"><strong>${first?'Perfect — puzzle cleared!':'Still correct!'}</strong> ${first?'+100 XP earned.':'Your answer still passes.'}</div>`;if(state.completedPuzzles[lang].size===puzzles[lang].length){els.finishText.textContent=`You finished all ${lang==='html'?'HTML':'Python'} puzzles and earned ${puzzles[lang].length*100} XP.`;els.finish.classList.add('visible')}saveState()}function resetPuzzle(){const lang=state.practiceLanguage,i=state.puzzle[lang];state.code[lang][i]=puzzles[lang][i].starter;renderPractice()}
+    function registerWebMCP(){if(!navigator.modelContext?.registerTool)return;try{navigator.modelContext.registerTool({name:'search_apex_topics',description:'Search the Apex HTML or Python lesson library.',inputSchema:{type:'object',properties:{language:{type:'string',enum:['html','python']},query:{type:'string'}},required:['language','query']},execute:async input=>{const matches=curriculum[input.language].filter(t=>`${t.title} ${t.summary} ${t.keywords}`.toLowerCase().includes(input.query.toLowerCase()));return{matches:matches.map(t=>({id:t.id,title:t.title,summary:t.summary}))}}});navigator.modelContext.registerTool({name:'open_apex_topic',description:'Open a lesson in the visible Apex learning hub.',inputSchema:{type:'object',properties:{language:{type:'string',enum:['html','python']},topic_id:{type:'string'}},required:['language','topic_id']},execute:async input=>{const index=curriculum[input.language].findIndex(t=>t.id===input.topic_id);if(index<0)throw new Error('Topic not found');setView('learn');openTopic(input.language,index);return{opened:curriculum[input.language][index].title}}})}catch{}}
+    loadState();$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));$$('[data-learn-language]').forEach(b=>b.addEventListener('click',()=>setLearnLanguage(b.dataset.learnLanguage)));$$('[data-practice-language]').forEach(b=>b.addEventListener('click',()=>setPracticeLanguage(b.dataset.practiceLanguage)));els.topicList.addEventListener('click',e=>{const b=e.target.closest('[data-topic-index]');if(b)openTopic(state.learnLanguage,Number(b.dataset.topicIndex))});els.searchResults.addEventListener('click',e=>{const b=e.target.closest('[data-search-index]');if(b)openTopic(state.learnLanguage,Number(b.dataset.searchIndex))});els.topicSearch.addEventListener('input',e=>renderSearch(e.target.value));els.searchClear.addEventListener('click',()=>{els.topicSearch.value='';renderSearch('');els.topicSearch.focus()});els.lessonCard.addEventListener('click',e=>{if(e.target.closest('#completeTopic'))completeCurrentTopic();if(e.target.closest('#nextTopic'))nextTopic();if(e.target.closest('#practiceTopic')){state.practiceLanguage=state.learnLanguage;setView('practice')}if(e.target.closest('[data-copy-code]'))copyCode()});els.levelList.addEventListener('click',e=>{const b=e.target.closest('[data-puzzle-index]');if(b){state.code[state.practiceLanguage][state.puzzle[state.practiceLanguage]]=els.editor.value;state.puzzle[state.practiceLanguage]=Number(b.dataset.puzzleIndex);renderPractice()}});els.editor.addEventListener('input',()=>{state.code[state.practiceLanguage][state.puzzle[state.practiceLanguage]]=els.editor.value;updatePreview();saveState()});els.editor.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();const s=e.target.selectionStart;e.target.value=e.target.value.slice(0,s)+'  '+e.target.value.slice(e.target.selectionEnd);e.target.selectionStart=e.target.selectionEnd=s+2;e.target.dispatchEvent(new Event('input'))}if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();checkPuzzle()}});$('#runBtn').addEventListener('click',checkPuzzle);$('#hintBtn').addEventListener('click',e=>{const visible=els.hint.classList.toggle('visible');e.currentTarget.setAttribute('aria-expanded',String(visible))});$('#resetBtn').addEventListener('click',resetPuzzle);$('#replayBtn').addEventListener('click',()=>{state.completedPuzzles[state.practiceLanguage].clear();els.finish.classList.remove('visible');renderPractice()});els.finish.addEventListener('click',e=>{if(e.target===els.finish)els.finish.classList.remove('visible')});setLearnLanguage(state.learnLanguage);setView(state.view);updateXp();registerWebMCP();
   </script>
 </body>
 </html>
