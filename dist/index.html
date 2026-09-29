@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Apex — Learn HTML by playing</title>
-  <meta name="description" content="Learn HTML one tiny puzzle at a time with live previews, friendly hints, and instant feedback.">
+  <title>Apex — Learn HTML and Python by playing</title>
+  <meta name="description" content="Learn HTML and Python one tiny puzzle at a time with live previews, friendly hints, and instant feedback.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23131827'/%3E%3Cpath d='M6 24 16 6l10 18h-6l-4-8-4 8Z' fill='%23eaff55'/%3E%3C/svg%3E">
   <style>
     :root {
@@ -36,6 +36,12 @@
         linear-gradient(180deg, #141a2a 0%, var(--ink) 65%);
     }
 
+    body[data-language="python"] {
+      --lime: #ffd84a;
+      --blue: #5aa9e6;
+      --mint: #82e7c1;
+    }
+
     button, textarea { font: inherit; }
     button { cursor: pointer; }
 
@@ -48,7 +54,7 @@
 
     header {
       display: grid;
-      grid-template-columns: auto minmax(180px, 1fr) auto;
+      grid-template-columns: auto auto minmax(180px, 1fr) auto;
       align-items: center;
       gap: 28px;
       min-height: 64px;
@@ -73,6 +79,28 @@
 
     .brand-name { font-size: 1.45rem; font-weight: 900; letter-spacing: -.04em; }
     .brand-note { display: block; margin-top: 1px; color: var(--muted); font-size: .82rem; }
+
+    .course-switcher {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: #0d1320;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .course-btn {
+      min-height: 36px;
+      padding: 7px 12px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 800;
+    }
+
+    .course-btn:hover { color: var(--paper); }
+    .course-btn[aria-pressed="true"] { color: var(--ink); background: var(--lime); }
 
     .climb { max-width: 640px; justify-self: center; width: 100%; }
     .climb-label { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--muted); font-size: .85rem; }
@@ -251,6 +279,7 @@
     @keyframes pop { from { transform: scale(.98); opacity: 0; } }
 
     @media (max-width: 1120px) {
+      header { grid-template-columns: auto auto 1fr auto; gap: 16px; }
       .game-grid { grid-template-columns: 190px 1fr; }
       .preview-column { grid-column: 2; grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
       .challenge { min-height: 640px; }
@@ -261,7 +290,9 @@
       .shell { padding: 12px 12px 28px; }
       header { grid-template-columns: 1fr auto; gap: 12px; }
       .brand-note { display: none; }
-      .climb { grid-column: 1 / -1; grid-row: 2; }
+      .course-switcher { grid-column: 1 / -1; grid-row: 2; }
+      .course-btn { flex: 1; }
+      .climb { grid-column: 1 / -1; grid-row: 3; }
       .xp-pill { min-width: auto; }
       .game-grid { display: flex; flex-direction: column; }
       .level-rail { padding: 12px; overflow-x: auto; }
@@ -289,9 +320,13 @@
 <body>
   <div class="shell">
     <header>
-      <div class="brand" aria-label="Apex HTML learning game">
+      <div class="brand" aria-label="Apex coding learning game">
         <span class="brand-mark" aria-hidden="true">A</span>
-        <span><span class="brand-name">Apex</span><span class="brand-note">HTML, one climb at a time</span></span>
+        <span><span class="brand-name">Apex</span><span class="brand-note">Code, one climb at a time</span></span>
+      </div>
+      <div class="course-switcher" aria-label="Choose a language">
+        <button class="course-btn" data-language="html" aria-pressed="true">HTML</button>
+        <button class="course-btn" data-language="python" aria-pressed="false">Python</button>
       </div>
       <div class="climb" aria-label="Course progress">
         <div class="climb-label"><span id="progressText">Base camp</span><span id="progressCount">0 of 5 complete</span></div>
@@ -324,10 +359,10 @@
         <div class="editor-wrap">
           <div class="editor-bar">
             <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span>index.html</span>
-            <span>HTML</span>
+            <span id="editorFile">index.html</span>
+            <span id="editorLanguage">HTML</span>
           </div>
-          <textarea id="codeEditor" aria-label="HTML code editor" spellcheck="false"></textarea>
+          <textarea id="codeEditor" aria-label="Code editor" spellcheck="false"></textarea>
         </div>
 
         <div class="actions">
@@ -342,14 +377,14 @@
 
       <aside class="preview-column">
         <section class="panel preview-panel" aria-labelledby="previewTitle">
-          <div class="panel-title"><h2 id="previewTitle">Your tiny website</h2><span class="live-badge">Live preview</span></div>
+          <div class="panel-title"><h2 id="previewTitle">Your tiny website</h2><span class="live-badge" id="previewStatus">Live preview</span></div>
           <div class="browser-chrome" aria-hidden="true"><span></span><span></span><span></span><span class="address"></span></div>
           <iframe id="preview" title="Preview of your HTML" sandbox=""></iframe>
         </section>
 
         <section class="panel toolbox" aria-labelledby="toolboxTitle">
           <h2 id="toolboxTitle">Tag backpack</h2>
-          <p>The tags you need for this puzzle glow blue.</p>
+          <p id="toolboxHelp">The tags you need for this puzzle glow blue.</p>
           <div class="tag-row" id="tagRow"></div>
         </section>
       </aside>
@@ -360,7 +395,7 @@
     <div class="finish-card">
       <div class="summit" aria-hidden="true">▲</div>
       <h2 id="finishTitle">You reached the summit!</h2>
-      <p>You built headings, paragraphs, links, lists, and a complete content card. That is real HTML.</p>
+      <p id="finishText">You built headings, paragraphs, links, lists, and a complete content card. That is real HTML.</p>
       <button class="btn" id="replayBtn">Climb again</button>
     </div>
   </div>
@@ -368,6 +403,7 @@
   <script>
     const puzzles = [
       {
+        language: "html",
         name: "Headline",
         zone: "First steps",
         title: "Give the page a headline",
@@ -383,6 +419,7 @@
         miss: "Almost! Add one <code>&lt;h1&gt;</code> whose text is exactly “Hello, world!”"
       },
       {
+        language: "html",
         name: "Emphasis",
         zone: "Meaning matters",
         title: "Make one word stand strong",
@@ -399,6 +436,7 @@
         miss: "Keep the sentence inside <code>&lt;p&gt;</code>, then wrap just “fun” in <code>&lt;strong&gt;</code>."
       },
       {
+        language: "html",
         name: "Link",
         zone: "Connect pages",
         title: "Open a door to the web",
@@ -414,6 +452,7 @@
         miss: "The text is ready. Add an <code>href</code> with the full MDN address to the opening <code>&lt;a&gt;</code> tag."
       },
       {
+        language: "html",
         name: "List",
         zone: "Shape content",
         title: "Pack a three-item list",
@@ -430,6 +469,7 @@
         miss: "Your <code>&lt;ul&gt;</code> needs three <code>&lt;li&gt;</code> children in this order: HTML, CSS, JavaScript."
       },
       {
+        language: "html",
         name: "Mini page",
         zone: "Summit build",
         title: "Build your first content card",
@@ -446,13 +486,80 @@
           return h?.textContent.trim().toLowerCase() === "my first site" && p?.textContent.trim().toLowerCase() === "built at apex" && b?.textContent.trim().toLowerCase() === "explore";
         },
         miss: "Check that the section contains an <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, and <code>&lt;button&gt;</code> with the requested words."
+      },
+      {
+        language: "python",
+        name: "Print",
+        zone: "Say hello",
+        title: "Make Python speak",
+        lesson: "Python uses <code>print()</code> to show words and results. Put text inside quotes so Python knows it is a string.",
+        goal: "Print the exact words “Hello, Python!”",
+        starter: "# Make Python say hello\n",
+        hint: "Put the message between quotes: <code>print(\"Hello, Python!\")</code>",
+        tags: ["print()", "\"text\""],
+        test(code) { return /print\s*\(\s*([\"'])Hello,\s*Python!\1\s*\)/.test(code); },
+        miss: "Use <code>print()</code> with “Hello, Python!” inside quotes."
+      },
+      {
+        language: "python",
+        name: "Variable",
+        zone: "Save a value",
+        title: "Give a number a name",
+        lesson: "A variable is a labeled box. Write a name, an equals sign, and a value. You can use that name again later.",
+        goal: "Create a variable named score with the value 10, then print score.",
+        starter: "score = 0\nprint(score)",
+        hint: "Change the first line to <code>score = 10</code>. Keep <code>print(score)</code> on the next line.",
+        tags: ["score = 10", "print(score)"],
+        test(code) { return /^\s*score\s*=\s*10\s*$/m.test(code) && /print\s*\(\s*score\s*\)/.test(code); },
+        miss: "Set <code>score</code> to 10, then pass the variable name to <code>print()</code>."
+      },
+      {
+        language: "python",
+        name: "String",
+        zone: "Work with words",
+        title: "Build a personal greeting",
+        lesson: "Strings are pieces of text inside quotes. The <code>+</code> sign can join two strings together.",
+        goal: "Set name to “Apex”, then print “Hello, Apex” by joining “Hello, ” and name.",
+        starter: "name = \"\"\nprint(\"Hello, \" + name)",
+        hint: "Give <code>name</code> the string value <code>\"Apex\"</code>. The second line is already ready.",
+        tags: ["name = \"Apex\"", "+"],
+        test(code) { return /^\s*name\s*=\s*([\"'])Apex\1\s*$/m.test(code) && /print\s*\(\s*([\"'])Hello,\s*\1\s*\+\s*name\s*\)/.test(code); },
+        miss: "Set <code>name = \"Apex\"</code>, then join it to <code>\"Hello, \"</code> with <code>+</code>."
+      },
+      {
+        language: "python",
+        name: "List",
+        zone: "Collect values",
+        title: "Pack a list of skills",
+        lesson: "A list keeps several values together inside square brackets. Positions start at zero, so <code>[1]</code> picks the second item.",
+        goal: "Create skills with “HTML” and “Python”, then print the second item.",
+        starter: "skills = [\"HTML\"]\nprint(skills[0])",
+        hint: "Add <code>\"Python\"</code> as the second list item, then change the index to <code>[1]</code>.",
+        tags: ["[]", "skills[1]"],
+        test(code) { return /skills\s*=\s*\[\s*([\"'])HTML\1\s*,\s*([\"'])Python\2\s*\]/.test(code) && /print\s*\(\s*skills\s*\[\s*1\s*\]\s*\)/.test(code); },
+        miss: "Your list needs HTML first and Python second. Print <code>skills[1]</code> to choose Python."
+      },
+      {
+        language: "python",
+        name: "Loop",
+        zone: "Summit build",
+        title: "Count with a loop",
+        lesson: "A <code>for</code> loop repeats indented code. <code>range(1, 4)</code> produces 1, 2, and 3.",
+        goal: "Use a for loop and range(1, 4) to print 1, 2, and 3 on separate lines.",
+        starter: "for step in range(1, 4):\n  # Print step here",
+        hint: "Under the loop, add two spaces and write <code>print(step)</code>.",
+        tags: ["for", "range()", "print(step)"],
+        test(code) { return /for\s+(\w+)\s+in\s+range\s*\(\s*1\s*,\s*4\s*\)\s*:\s*\n\s+print\s*\(\s*\1\s*\)/.test(code); },
+        miss: "Keep <code>range(1, 4)</code>, then indent <code>print(step)</code> beneath the loop."
       }
     ];
 
     const state = {
       current: 0,
+      language: "html",
       complete: new Set(),
-      code: puzzles.map(p => p.starter)
+      code: puzzles.map(p => p.starter),
+      lastByLanguage: { html: 0, python: 5 }
     };
 
     const els = {
@@ -460,7 +567,11 @@
       kicker: document.querySelector("#missionKicker"), title: document.querySelector("#missionTitle"), lesson: document.querySelector("#lessonText"),
       goal: document.querySelector("#goalText"), hint: document.querySelector("#hintBox"), result: document.querySelector("#result"),
       tags: document.querySelector("#tagRow"), xp: document.querySelector("#xp"), fill: document.querySelector("#trailFill"),
-      progressText: document.querySelector("#progressText"), progressCount: document.querySelector("#progressCount"), overlay: document.querySelector("#finishOverlay")
+      progressText: document.querySelector("#progressText"), progressCount: document.querySelector("#progressCount"), overlay: document.querySelector("#finishOverlay"),
+      editorFile: document.querySelector("#editorFile"), editorLanguage: document.querySelector("#editorLanguage"),
+      previewTitle: document.querySelector("#previewTitle"), previewStatus: document.querySelector("#previewStatus"),
+      toolboxTitle: document.querySelector("#toolboxTitle"), toolboxHelp: document.querySelector("#toolboxHelp"),
+      finishTitle: document.querySelector("#finishTitle"), finishText: document.querySelector("#finishText")
     };
 
     function escapeHtml(value) {
@@ -472,52 +583,120 @@
         const saved = JSON.parse(localStorage.getItem("apex-progress"));
         if (!saved) return;
         state.current = Math.min(Math.max(Number(saved.current) || 0, 0), puzzles.length - 1);
+        state.language = saved.language === "python" ? "python" : puzzles[state.current].language;
         state.complete = new Set((saved.complete || []).filter(i => Number.isInteger(i) && i >= 0 && i < puzzles.length));
-        if (Array.isArray(saved.code) && saved.code.length === puzzles.length) state.code = saved.code.map((v, i) => typeof v === "string" ? v : puzzles[i].starter);
+        if (Array.isArray(saved.code)) state.code = puzzles.map((p, i) => typeof saved.code[i] === "string" ? saved.code[i] : p.starter);
+        if (saved.lastByLanguage) {
+          state.lastByLanguage.html = Number.isInteger(saved.lastByLanguage.html) ? saved.lastByLanguage.html : 0;
+          state.lastByLanguage.python = Number.isInteger(saved.lastByLanguage.python) ? saved.lastByLanguage.python : 5;
+        }
       } catch (_) {}
     }
 
     function save() {
-      localStorage.setItem("apex-progress", JSON.stringify({ current: state.current, complete: [...state.complete], code: state.code }));
+      localStorage.setItem("apex-progress", JSON.stringify({ current: state.current, language: state.language, complete: [...state.complete], code: state.code, lastByLanguage: state.lastByLanguage }));
+    }
+
+    function activeIndexes() {
+      return puzzles.map((p, index) => p.language === state.language ? index : -1).filter(index => index >= 0);
+    }
+
+    function switchLanguage(language) {
+      if (!['html', 'python'].includes(language)) return;
+      if (els.editor.value) state.code[state.current] = els.editor.value;
+      state.language = language;
+      const indexes = activeIndexes();
+      const remembered = state.lastByLanguage[language];
+      openPuzzle(indexes.includes(remembered) ? remembered : indexes[0], { focus: true });
     }
 
     function renderMap() {
-      els.list.innerHTML = puzzles.map((p, i) => `
-        <button class="level-btn ${state.complete.has(i) ? "done" : ""}" data-level="${i}" ${i === state.current ? 'aria-current="step"' : ""}>
-          <span class="level-number">${state.complete.has(i) ? "✓" : i + 1}</span>
-          <span class="level-name">${p.name}</span>
+      const indexes = activeIndexes();
+      els.list.innerHTML = indexes.map((puzzleIndex, localIndex) => `
+        <button class="level-btn ${state.complete.has(puzzleIndex) ? "done" : ""}" data-level="${puzzleIndex}" ${puzzleIndex === state.current ? 'aria-current="step"' : ""}>
+          <span class="level-number">${state.complete.has(puzzleIndex) ? "✓" : localIndex + 1}</span>
+          <span class="level-name">${puzzles[puzzleIndex].name}</span>
         </button>`).join("");
       els.list.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => openPuzzle(Number(btn.dataset.level))));
+      document.querySelectorAll(".course-btn").forEach(btn => btn.setAttribute("aria-pressed", String(btn.dataset.language === state.language)));
     }
 
     function updateProgress() {
-      const count = state.complete.size;
-      els.xp.textContent = count * 100;
-      els.fill.style.width = `${count / puzzles.length * 100}%`;
-      els.progressCount.textContent = `${count} of ${puzzles.length} complete`;
-      els.progressText.textContent = count === 0 ? "Base camp" : count === puzzles.length ? "Summit reached" : `Climbing · puzzle ${state.current + 1}`;
+      const indexes = activeIndexes();
+      const count = indexes.filter(index => state.complete.has(index)).length;
+      const localIndex = indexes.indexOf(state.current) + 1;
+      els.xp.textContent = state.complete.size * 100;
+      els.fill.style.width = `${count / indexes.length * 100}%`;
+      els.progressCount.textContent = `${count} of ${indexes.length} ${state.language.toUpperCase()} complete`;
+      els.progressText.textContent = count === 0 ? "Base camp" : count === indexes.length ? "Summit reached" : `Climbing · puzzle ${localIndex}`;
+    }
+
+    function pythonOutput(code) {
+      const clean = code.replace(/#.*$/gm, "");
+      const loop = clean.match(/for\s+(\w+)\s+in\s+range\s*\(\s*(-?\d+)\s*,\s*(-?\d+)\s*\)\s*:\s*\n\s+print\s*\(\s*\1\s*\)/);
+      if (loop) {
+        const values = [];
+        for (let value = Number(loop[2]); value < Number(loop[3]) && values.length < 50; value++) values.push(value);
+        return values.join("\n");
+      }
+
+      const variables = {};
+      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*(-?\d+(?:\.\d+)?)\s*$/gm)) variables[match[1]] = match[2];
+      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*([\"'])(.*?)\2\s*$/gm)) variables[match[1]] = match[3];
+      for (const match of clean.matchAll(/^\s*(\w+)\s*=\s*\[(.*?)\]\s*$/gm)) {
+        variables[match[1]] = [...match[2].matchAll(/([\"'])(.*?)\1/g)].map(item => item[2]);
+      }
+
+      const output = [];
+      for (const match of clean.matchAll(/print\s*\(([^\n]*)\)/g)) {
+        const expression = match[1].trim();
+        const literal = expression.match(/^([\"'])(.*?)\1$/);
+        const joined = expression.match(/^([\"'])(.*?)\1\s*\+\s*(\w+)$/);
+        const indexed = expression.match(/^(\w+)\s*\[\s*(\d+)\s*\]$/);
+        if (joined && variables[joined[3]] !== undefined) output.push(joined[2] + variables[joined[3]]);
+        else if (indexed && Array.isArray(variables[indexed[1]])) output.push(variables[indexed[1]][Number(indexed[2])] ?? "");
+        else if (literal) output.push(literal[2]);
+        else if (variables[expression] !== undefined) output.push(String(variables[expression]));
+      }
+      return output.join("\n") || "Your output will appear here.";
     }
 
     function updatePreview() {
       const code = els.editor.value;
       state.code[state.current] = code;
-      const safeBase = `<!doctype html><html><head><style>body{font-family:Arial,sans-serif;padding:24px;color:#172033;line-height:1.5}h1,h2{line-height:1.1}a{color:#3b50d6}section{padding:22px;border:2px solid #172033;border-radius:14px;box-shadow:6px 6px 0 #eaff55}button{padding:9px 14px;border:0;border-radius:8px;background:#172033;color:white;font-weight:700}</style></head><body>${code}</body></html>`;
+      const safeBase = state.language === "html"
+        ? `<!doctype html><html><head><style>body{font-family:Arial,sans-serif;padding:24px;color:#172033;line-height:1.5}h1,h2{line-height:1.1}a{color:#3b50d6}section{padding:22px;border:2px solid #172033;border-radius:14px;box-shadow:6px 6px 0 #eaff55}button{padding:9px 14px;border:0;border-radius:8px;background:#172033;color:white;font-weight:700}</style></head><body>${code}</body></html>`
+        : `<!doctype html><html><head><style>body{margin:0;padding:26px;background:#101522;color:#eaf2ff;font:16px/1.7 Consolas,monospace}.prompt{color:#ffd84a;margin-right:9px}pre{white-space:pre-wrap;margin:0}</style></head><body><pre><span class="prompt">›</span>${escapeHtml(pythonOutput(code))}</pre></body></html>`;
       els.preview.srcdoc = safeBase;
       save();
     }
 
     function openPuzzle(index, options = {}) {
-      state.code[state.current] = els.editor.value || state.code[state.current];
+      if (!Number.isInteger(index) || !puzzles[index]) return;
+      if (els.editor.value) state.code[state.current] = els.editor.value;
       state.current = Math.min(Math.max(index, 0), puzzles.length - 1);
       const p = puzzles[state.current];
-      els.kicker.textContent = `Puzzle ${state.current + 1} · ${p.zone}`;
+      state.language = p.language;
+      state.lastByLanguage[state.language] = state.current;
+      document.body.dataset.language = state.language;
+      const localIndex = activeIndexes().indexOf(state.current) + 1;
+      els.kicker.textContent = `Puzzle ${localIndex} · ${p.zone}`;
       els.title.textContent = p.title;
       els.lesson.innerHTML = p.lesson;
       els.goal.textContent = p.goal;
       els.editor.value = state.code[state.current];
+      els.editor.setAttribute("aria-label", `${state.language === "html" ? "HTML" : "Python"} code editor`);
+      els.editorFile.textContent = state.language === "html" ? "index.html" : "main.py";
+      els.editorLanguage.textContent = state.language === "html" ? "HTML" : "Python";
+      els.previewTitle.textContent = state.language === "html" ? "Your tiny website" : "Python console";
+      els.previewStatus.textContent = state.language === "html" ? "Live preview" : "Live output";
+      els.toolboxTitle.textContent = state.language === "html" ? "Tag backpack" : "Python toolkit";
+      els.toolboxHelp.textContent = state.language === "html" ? "The tags you need for this puzzle glow blue." : "The Python pieces you need for this puzzle glow blue.";
       els.hint.innerHTML = p.hint;
       els.hint.classList.remove("show");
-      document.querySelector("#hintBtn").setAttribute("aria-expanded", "false");
+      const hintButton = document.querySelector("#hintBtn");
+      hintButton.setAttribute("aria-expanded", "false");
+      hintButton.textContent = "Give me a hint";
       els.result.innerHTML = "";
       els.tags.innerHTML = p.tags.map(tag => `<span class="tag active">${escapeHtml(tag)}</span>`).join("");
       renderMap();
@@ -528,11 +707,13 @@
 
     function checkSolution(options = {}) {
       const p = puzzles[state.current];
-      const doc = new DOMParser().parseFromString(els.editor.value, "text/html");
-      const passed = Boolean(p.test(doc));
+      const testInput = p.language === "html" ? new DOMParser().parseFromString(els.editor.value, "text/html") : els.editor.value;
+      const passed = Boolean(p.test(testInput));
+      const indexes = activeIndexes();
+      const localIndex = indexes.indexOf(state.current);
       if (!passed) {
         els.result.innerHTML = `<div class="feedback try"><strong>Not quite yet.</strong>${p.miss}</div>`;
-        return { passed: false, puzzle: state.current + 1, message: "The solution does not meet the puzzle goal yet." };
+        return { passed: false, language: state.language, puzzle: localIndex + 1, message: "The solution does not meet the puzzle goal yet." };
       }
 
       const wasDone = state.complete.has(state.current);
@@ -540,15 +721,27 @@
       save();
       renderMap();
       updateProgress();
-      const isLast = state.current === puzzles.length - 1;
-      els.result.innerHTML = `<div class="feedback win"><strong>${wasDone ? "Still correct!" : "Perfect — puzzle cleared!"}</strong>${isLast ? "You used several tags together like a real web builder." : "Your HTML has the right structure. Ready for the next climb?"}</div>`;
+      const isLast = localIndex === indexes.length - 1;
+      const courseComplete = indexes.every(index => state.complete.has(index));
+      const successDetail = state.language === "html" ? "Your HTML has the right structure." : "Your Python gives the right result.";
+      const remaining = indexes.filter(index => !state.complete.has(index)).length;
+      const resultDetail = isLast
+        ? (courseComplete ? `You finished the ${state.language === "html" ? "HTML" : "Python"} climb.` : `${successDetail} Clear ${remaining} more ${remaining === 1 ? "puzzle" : "puzzles"} to reach the summit.`)
+        : `${successDetail} Ready for the next climb?`;
+      els.result.innerHTML = `<div class="feedback win"><strong>${wasDone ? "Still correct!" : "Perfect — puzzle cleared!"}</strong>${resultDetail}</div>`;
 
-      if (isLast && state.complete.size === puzzles.length) {
-        setTimeout(() => els.overlay.classList.add("show"), options.instant ? 0 : 550);
+      if (isLast) {
+        if (courseComplete) {
+          els.finishTitle.textContent = `${state.language === "html" ? "HTML" : "Python"} summit reached!`;
+          els.finishText.textContent = state.language === "html"
+            ? "You built headings, paragraphs, links, lists, and a complete content card. That is real HTML."
+            : "You printed messages, used variables and strings, explored lists, and wrote your first loop. That is real Python.";
+          setTimeout(() => els.overlay.classList.add("show"), options.instant ? 0 : 550);
+        }
       } else if (!options.stay) {
-        setTimeout(() => openPuzzle(state.current + 1, { focus: true }), options.instant ? 0 : 850);
+        setTimeout(() => openPuzzle(indexes[localIndex + 1], { focus: true }), options.instant ? 0 : 850);
       }
-      return { passed: true, puzzle: state.current + 1, completed: state.complete.size, xp: state.complete.size * 100 };
+      return { passed: true, language: state.language, puzzle: localIndex + 1, completed: indexes.filter(index => state.complete.has(index)).length, xp: state.complete.size * 100 };
     }
 
     document.querySelector("#runBtn").addEventListener("click", () => { updatePreview(); checkSolution(); });
@@ -566,13 +759,16 @@
       els.editor.focus();
     });
     document.querySelector("#replayBtn").addEventListener("click", () => {
-      state.current = 0;
-      state.complete.clear();
-      state.code = puzzles.map(p => p.starter);
+      const indexes = activeIndexes();
+      indexes.forEach(index => {
+        state.complete.delete(index);
+        state.code[index] = puzzles[index].starter;
+      });
       els.overlay.classList.remove("show");
       save();
-      openPuzzle(0, { focus: true });
+      openPuzzle(indexes[0], { focus: true });
     });
+    document.querySelectorAll(".course-btn").forEach(btn => btn.addEventListener("click", () => switchLanguage(btn.dataset.language)));
     els.editor.addEventListener("input", updatePreview);
     els.editor.addEventListener("keydown", event => {
       if (event.key === "Tab") {
@@ -593,34 +789,36 @@
       if (!context?.registerTool) return;
       const tools = [
         {
-          name: "open_html_puzzle",
-          title: "Open HTML puzzle",
-          description: "Open one of the five Apex HTML puzzles in the visible game.",
-          inputSchema: { type: "object", properties: { puzzle: { type: "integer", minimum: 1, maximum: 5 } }, required: ["puzzle"], additionalProperties: false },
+          name: "open_code_puzzle",
+          title: "Open coding puzzle",
+          description: "Open one of the five HTML or Python puzzles in the visible Apex game.",
+          inputSchema: { type: "object", properties: { language: { type: "string", enum: ["html", "python"] }, puzzle: { type: "integer", minimum: 1, maximum: 5 } }, required: ["language", "puzzle"], additionalProperties: false },
           annotations: { readOnlyHint: false, untrustedContentHint: false },
           execute(input) {
+            if (!['html', 'python'].includes(input?.language)) throw new Error("Language must be html or python.");
             if (!Number.isInteger(input?.puzzle) || input.puzzle < 1 || input.puzzle > 5) throw new Error("Puzzle must be an integer from 1 to 5.");
-            openPuzzle(input.puzzle - 1);
-            return { puzzle: input.puzzle, title: puzzles[input.puzzle - 1].title };
+            const indexes = puzzles.map((p, index) => p.language === input.language ? index : -1).filter(index => index >= 0);
+            openPuzzle(indexes[input.puzzle - 1]);
+            return { language: input.language, puzzle: input.puzzle, title: puzzles[indexes[input.puzzle - 1]].title };
           }
         },
         {
-          name: "set_html_code",
+          name: "set_code",
           title: "Set puzzle code",
-          description: "Place HTML into the visible Apex editor and refresh its live preview without checking the answer.",
+          description: "Place code into the visible Apex editor and refresh the HTML preview or Python console without checking the answer.",
           inputSchema: { type: "object", properties: { code: { type: "string", maxLength: 10000 } }, required: ["code"], additionalProperties: false },
           annotations: { readOnlyHint: false, untrustedContentHint: false },
           execute(input) {
             if (typeof input?.code !== "string" || input.code.length > 10000) throw new Error("Code must be a string under 10,000 characters.");
             els.editor.value = input.code;
             updatePreview();
-            return { puzzle: state.current + 1, updated: true };
+            return { language: state.language, puzzle: activeIndexes().indexOf(state.current) + 1, updated: true };
           }
         },
         {
-          name: "submit_html_solution",
-          title: "Submit HTML solution",
-          description: "Check the HTML currently visible in the Apex editor against the active puzzle goal.",
+          name: "submit_code_solution",
+          title: "Submit coding solution",
+          description: "Check the code currently visible in the Apex editor against the active HTML or Python puzzle goal.",
           inputSchema: { type: "object", properties: {}, additionalProperties: false },
           annotations: { readOnlyHint: false, untrustedContentHint: false },
           execute() { return checkSolution({ stay: true, instant: true }); }
